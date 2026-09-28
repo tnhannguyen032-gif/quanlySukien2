@@ -1,0 +1,409 @@
+﻿@model IEnumerable<quanlySukien.Models.registration>
+
+@{
+    ViewBag.Title = "Quản lý điểm danh";
+
+    var eventList = ViewBag.Events;
+
+    var selectedEvent = ViewBag.SelectedEvent;
+
+    var attendanceList = ViewBag.AttendanceList 
+        as IEnumerable<quanlySukien.Models.attendance>;
+}
+
+<div class="container">
+
+    <!-- =========================
+         TIÊU ĐỀ
+    ========================== -->
+
+    <div class="mb-4">
+
+        <h2 style="color:#005baa; font-weight:700;">
+            Quản lý điểm danh
+        </h2>
+
+        <p class="text-muted">
+            Điểm danh sinh viên đã được duyệt tham gia sự kiện.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         THÔNG BÁO
+    ========================== -->
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- =========================
+         CHỌN SỰ KIỆN
+    ========================== -->
+
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h5 style="color:#005baa;">
+                Chọn sự kiện
+            </h5>
+
+            <form method="get"
+                  action="@Url.Action("Index", "StaffAttendance")">
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <select name="eventId"
+                                class="form-control">
+
+                            <option value="">
+                                -- Chọn sự kiện --
+                            </option>
+
+                            @if (eventList != null)
+                            {
+                                foreach (var eventItem in eventList)
+                                {
+                                    if (selectedEvent != null &&
+                                        selectedEvent.id == eventItem.id)
+                                    {
+                                        <option value="@eventItem.id"
+                                                selected>
+                                            @eventItem.title
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@eventItem.id">
+                                            @eventItem.title
+                                        </option>
+                                    }
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+                            Xem
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         THÔNG TIN SỰ KIỆN
+    ========================== -->
+
+    @if (selectedEvent != null)
+    {
+        <div class="card mb-4">
+
+            <div class="card-body">
+
+                <h4 style="color:#005baa; font-weight:700;">
+                    @selectedEvent.title
+                </h4>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <p>
+                            <strong>Địa điểm:</strong>
+                            @selectedEvent.location
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <p>
+                            <strong>Thời gian:</strong>
+
+                            @selectedEvent.start_time.ToString("dd/MM/yyyy HH:mm")
+
+                            -
+
+                            @selectedEvent.end_time.ToString("dd/MM/yyyy HH:mm")
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <p class="mb-0">
+
+                    <strong>Số sinh viên được duyệt:</strong>
+
+                    @Model.Count()
+
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- =========================
+         DANH SÁCH SINH VIÊN
+    ========================== -->
+
+    @if (selectedEvent != null)
+    {
+        if (Model != null && Model.Any())
+        {
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 style="color:#005baa; font-weight:700;">
+                        Danh sách điểm danh
+                    </h5>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover">
+
+                            <thead style="background:#005baa; color:white;">
+
+                                <tr>
+                                    <th>Họ tên</th>
+                                    <th>Mã sinh viên</th>
+                                    <th>Email</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thời gian điểm danh</th>
+                                    <th>Thao tác</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <!-- =====================
+                                             HỌ TÊN
+                                        ====================== -->
+
+                                        <td>
+
+                                            @if (item.user != null)
+                                            {
+                                                @item.user.full_name
+                                            }
+                                            else
+                                            {
+                                                <span>---</span>
+                                            }
+
+                                        </td>
+
+
+                                        <!-- =====================
+                                             MÃ SINH VIÊN
+                                        ====================== -->
+
+                                        <td>
+
+                                            @if (item.user != null &&
+                                                item.user.student_profiles != null &&
+                                                item.user.student_profiles.Any())
+                                            {
+                                                var profile =
+                                                    item.user.student_profiles
+                                                    .FirstOrDefault();
+
+                                                @profile.student_code
+                                            }
+                                            else
+                                            {
+                                                <span>---</span>
+                                            }
+
+                                        </td>
+
+
+                                        <!-- =====================
+                                             EMAIL
+                                        ====================== -->
+
+                                        <td>
+
+                                            @if (item.user != null)
+                                            {
+                                                @item.user.email
+                                            }
+                                            else
+                                            {
+                                                <span>---</span>
+                                            }
+
+                                        </td>
+
+
+                                        <!-- =====================
+                                             TRẠNG THÁI
+                                        ====================== -->
+
+                                        <td>
+
+                                            @{
+                                                var attendanceItem =
+                                                    attendanceList == null
+                                                    ? null
+                                                    : attendanceList.FirstOrDefault(
+                                                        a => a.registration_id == item.id);
+                                            }
+
+                                            @if (attendanceItem == null)
+                                            {
+                                                <span class="badge badge-secondary">
+                                                    Chưa điểm danh
+                                                </span>
+                                            }
+                                            else if (attendanceItem.status == "present")
+                                            {
+                                                <span class="badge badge-success">
+                                                    Có mặt
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger">
+                                                    Vắng
+                                                </span>
+                                            }
+
+                                        </td>
+
+
+                                        <!-- =====================
+                                             THỜI GIAN
+                                        ====================== -->
+
+                                        <td>
+
+                                            @if (attendanceItem != null &&
+                                                attendanceItem.check_in_time.HasValue)
+                                            {
+                                                @attendanceItem.check_in_time.Value.ToString("dd/MM/yyyy HH:mm")
+                                                 }
+                                                else
+                                                {
+                                                  <span>---</span>
+                                                }
+
+                                        </td>
+
+
+                                        <!-- =====================
+                                             THAO TÁC
+                                        ====================== -->
+
+                                        <td>
+
+                                            @using (Html.BeginForm(
+                                                "CheckIn",
+                                                "StaffAttendance",
+                                                FormMethod.Post,
+                                                new
+                                                {
+                                                    style = "display:inline;"
+                                                }))
+                                            {
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@item.id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-success">
+                                                    Có mặt
+                                                </button>
+                                            }
+
+
+                                            @using (Html.BeginForm(
+                                                "Absent",
+                                                "StaffAttendance",
+                                                FormMethod.Post,
+                                                new
+                                                {
+                                                    style = "display:inline;"
+                                                }))
+                                            {
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@item.id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-danger ml-1">
+                                                    Vắng
+                                                </button>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center">
+                Chưa có sinh viên nào được duyệt tham gia sự kiện này.
+            </div>
+        }
+    }
+
+</div>

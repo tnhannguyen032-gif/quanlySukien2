@@ -1,0 +1,188 @@
+﻿@model IEnumerable<quanlySukien.Models.notification>
+
+@{
+    ViewBag.Title = "Thông báo";
+}
+
+<div class="container" style="max-width:900px;">
+
+    <!-- TIÊU ĐỀ -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 style="color:#005baa; font-weight:700;">
+                <i class="fa fa-bell"></i>
+                Thông báo
+            </h2>
+
+            <p class="text-muted mb-0">
+                Các thông báo liên quan đến hoạt động và đăng ký sự kiện của bạn.
+            </p>
+        </div>
+
+        @if (Model != null && Model.Any(n => !n.is_read))
+        {
+            using (Html.BeginForm(
+                "MarkAllAsRead",
+                "Notifications",
+                FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <button type="submit"
+                        class="btn btn-outline-primary">
+                    <i class="fa fa-check-double"></i>
+                    Đánh dấu tất cả đã đọc
+                </button>
+            }
+        }
+
+    </div>
+
+
+    @if (Model == null || !Model.Any())
+    {
+        <!-- CHƯA CÓ THÔNG BÁO -->
+
+        <div class="card border-0 shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <i class="fa fa-bell-o"
+                   style="font-size:50px; color:#bbb;">
+                </i>
+
+                <h5 class="mt-3">
+                    Chưa có thông báo
+                </h5>
+
+                <p class="text-muted mb-0">
+                    Khi có thông báo mới, thông tin sẽ hiển thị tại đây.
+                </p>
+
+            </div>
+
+        </div>
+    }
+    else
+    {
+        <!-- DANH SÁCH THÔNG BÁO -->
+
+        foreach (var item in Model)
+        {
+            string notificationClass =
+                item.is_read
+                ? "notification-read"
+                : "notification-unread";
+
+            <div class="card border-0 shadow-sm mb-3 @notificationClass">
+
+                <div class="card-body">
+
+                    <div class="row align-items-center">
+
+                        <!-- ICON -->
+
+                        <div class="col-auto">
+
+                            @if (item.is_read)
+                            {
+                                <i class="fa fa-bell-o"
+                                   style="
+                                   font-size:24px;
+                                   color:#999;">
+                                </i>
+                            }
+                            else
+                            {
+                                <i class="fa fa-bell"
+                                   style="
+                                   font-size:24px;
+                                   color:#005baa;">
+                                </i>
+                            }
+
+                        </div>
+
+
+                        <!-- NỘI DUNG -->
+
+                        <div class="col">
+
+                            @if (!item.is_read)
+                            {
+                                <span class="badge badge-primary mb-2">
+                                    Mới
+                                </span>
+                            }
+
+                            <div style="
+                                line-height:1.6;
+                                font-size:16px;">
+
+                                @item.message
+
+                            </div>
+
+                            <small class="text-muted">
+
+                                <i class="fa fa-clock-o"></i>
+
+                                @item.created_at.ToString(
+                                    "dd/MM/yyyy HH:mm")
+
+                            </small>
+
+                        </div>
+
+
+                        <!-- THAO TÁC -->
+
+                        <div class="col-auto">
+
+                            @if (!item.is_read)
+                            {
+                                @Html.ActionLink(
+                                    "Đánh dấu đã đọc",
+                                    "Read",
+                                    "Notifications",
+                                    new { id = item.id },
+                                    new
+                                    {
+                                        @class =
+                                            "btn btn-sm btn-outline-primary"
+                                    }
+                                )
+                            }
+                            else
+                            {
+                                <span class="text-muted">
+                                    Đã đọc
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+    }
+
+</div>
+
+
+<style>
+
+    .notification-read {
+        background-color: #ffffff;
+    }
+
+    .notification-unread {
+        background-color: #f4f8fc;
+        border-left: 4px solid #005baa !important;
+    }
+</style>

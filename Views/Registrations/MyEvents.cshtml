@@ -1,0 +1,527 @@
+﻿@model IEnumerable<quanlySukien.Models.registration>
+
+@{
+    ViewBag.Title = "Sự kiện của tôi";
+
+    var eventTitles =
+        ViewBag.EventTitles as Dictionary<int, string>;
+
+    var attendanceStatuses =
+        ViewBag.AttendanceStatuses as Dictionary<int, string>;
+
+    var feedbackEventIds =
+        ViewBag.FeedbackEventIds as List<int>;
+}
+
+<div class="container my-events-page">
+
+    <!-- ==============================
+         TIÊU ĐỀ
+    =============================== -->
+
+    <div class="page-header text-center">
+
+        <h2>
+            <i class="fa fa-calendar-check-o"></i>
+            Sự kiện của tôi
+        </h2>
+
+        <p>
+            Theo dõi trạng thái đăng ký, điểm danh và đánh giá
+            các sự kiện bạn đã tham gia.
+        </p>
+
+    </div>
+
+
+    @if (Model == null || !Model.Any())
+    {
+        <!-- ==============================
+             CHƯA CÓ SỰ KIỆN
+        =============================== -->
+
+        <div class="empty-box text-center">
+
+            <i class="fa fa-calendar-o empty-icon"></i>
+
+            <h4>
+                Bạn chưa đăng ký sự kiện nào
+            </h4>
+
+            <p>
+                Hãy khám phá các sự kiện đang được tổ chức.
+            </p>
+
+            <a href="@Url.Action("Index", "Events")"
+               class="btn btn-primary">
+
+                <i class="fa fa-calendar"></i>
+                Xem sự kiện
+
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <!-- ==============================
+             BẢNG SỰ KIỆN
+        =============================== -->
+
+        <div class="table-responsive">
+
+            <table class="table my-events-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:24%;">
+                            Sự kiện
+                        </th>
+
+                        <th style="width:13%;">
+                            Đăng ký
+                        </th>
+
+                        <th style="width:15%;">
+                            Điểm danh
+                        </th>
+
+                        <th style="width:15%;">
+                            Đánh giá
+                        </th>
+
+                        <th style="width:16%;">
+                            Ngày đăng ký
+                        </th>
+
+                        <th style="width:17%;">
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        string eventTitle = "Không xác định";
+
+                        if (eventTitles != null &&
+                            eventTitles.ContainsKey(item.event_id))
+                        {
+                            eventTitle =
+                                eventTitles[item.event_id];
+                        }
+
+
+                        string attendanceStatus = null;
+
+                        if (attendanceStatuses != null &&
+                            attendanceStatuses.ContainsKey(item.id))
+                        {
+                            attendanceStatus =
+                                attendanceStatuses[item.id];
+                        }
+
+
+                        bool hasFeedback = false;
+
+                        if (feedbackEventIds != null)
+                        {
+                            hasFeedback =
+                                feedbackEventIds.Contains(item.event_id);
+                        }
+
+
+                        <tr>
+
+                            <!-- ==========================
+                                 TÊN SỰ KIỆN
+                            =========================== -->
+
+                            <td>
+
+                                <div class="event-name">
+                                    @eventTitle
+                                </div>
+
+                            </td>
+
+
+                            <!-- ==========================
+                                 TRẠNG THÁI ĐĂNG KÝ
+                            =========================== -->
+
+                            <td>
+
+                                @if (item.status == "pending")
+                                {
+                                    <span class="status status-pending">
+                                        <i class="fa fa-clock-o"></i>
+                                        Chờ duyệt
+                                    </span>
+                                }
+                                else if (item.status == "approved")
+                                {
+                                    <span class="status status-approved">
+                                        <i class="fa fa-check"></i>
+                                        Đã duyệt
+                                    </span>
+                                }
+                                else if (item.status == "rejected")
+                                {
+                                    <span class="status status-rejected">
+                                        <i class="fa fa-times"></i>
+                                        Từ chối
+                                    </span>
+                                }
+                                else if (item.status == "cancelled")
+                                {
+                                    <span class="status status-cancelled">
+                                        <i class="fa fa-ban"></i>
+                                        Đã hủy
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status status-cancelled">
+                                        @item.status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- ==========================
+                                 ĐIỂM DANH
+                            =========================== -->
+
+                            <td>
+
+                                @if (item.status != "approved")
+                                {
+                                    <span class="status status-disabled">
+                                        Chưa được duyệt
+                                    </span>
+                                }
+                                else if (attendanceStatus == "present")
+                                {
+                                    <span class="status status-approved">
+                                        <i class="fa fa-check-circle"></i>
+                                        Có mặt
+                                    </span>
+                                }
+                                else if (attendanceStatus == "absent")
+                                {
+                                    <span class="status status-rejected">
+                                        <i class="fa fa-times-circle"></i>
+                                        Vắng
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status status-disabled">
+                                        Chưa điểm danh
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- ==========================
+                                 ĐÁNH GIÁ
+                            =========================== -->
+
+                            <td>
+
+                                @if (item.status != "approved")
+                                {
+                                    <span class="status status-disabled">
+                                        Chưa đủ điều kiện
+                                    </span>
+                                }
+                                else if (attendanceStatus != "present")
+                                {
+                                    <span class="status status-disabled">
+                                        Chưa tham gia
+                                    </span>
+                                }
+                                else if (hasFeedback)
+                                {
+                                    <span class="status status-approved">
+                                        <i class="fa fa-star"></i>
+                                        Đã đánh giá
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status status-pending">
+                                        <i class="fa fa-star-o"></i>
+                                        Chưa đánh giá
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- ==========================
+                                 NGÀY ĐĂNG KÝ
+                            =========================== -->
+
+                            <td>
+
+                                <span class="register-date">
+                                    @item.registered_at.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+
+                            </td>
+
+
+                            <!-- ==========================
+                                 THAO TÁC
+                            =========================== -->
+
+                            <td>
+
+                                <a href="@Url.Action(
+                                    "Details",
+                                    "Events",
+                                    new { id = item.event_id })"
+                                   class="btn btn-sm btn-outline-primary">
+
+                                    <i class="fa fa-eye"></i>
+                                    Xem
+
+                                </a>
+
+
+                                @if (item.status == "approved" &&
+                                    attendanceStatus == "present" &&
+                                    !hasFeedback)
+                                {
+                                    <a href="@Url.Action(
+                                        "Create",
+                                        "Feedbacks",
+                                        new { eventId = item.event_id })"
+                                       class="btn btn-sm btn-outline-success ml-1">
+
+                                        <i class="fa fa-star"></i>
+                                        Đánh giá
+
+                                    </a>
+                                }
+                                else if (hasFeedback)
+                                {
+                                    <span class="completed-label">
+
+                                        <i class="fa fa-check"></i>
+                                        Đã đánh giá
+
+                                    </span>
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>
+
+
+<!-- ==========================================
+     CSS
+=========================================== -->
+
+<style>
+
+    .my-events-page {
+        padding-top: 20px;
+        padding-bottom: 50px;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+        .page-header h2 {
+            color: #005baa;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+            .page-header h2 i {
+                margin-right: 8px;
+            }
+
+        .page-header p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+
+    /* ===============================
+       EMPTY
+    =============================== */
+
+    .empty-box {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 60px 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .empty-icon {
+        font-size: 55px;
+        color: #bfc7ce;
+        margin-bottom: 20px;
+    }
+
+    .empty-box h4 {
+        color: #123456;
+        font-weight: 700;
+    }
+
+    .empty-box p {
+        color: #6c757d;
+    }
+
+
+    /* ===============================
+       TABLE
+    =============================== */
+
+    .my-events-table {
+        background: #ffffff;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        margin-bottom: 0;
+    }
+
+        .my-events-table thead {
+            background: #005baa;
+            color: #ffffff;
+        }
+
+            .my-events-table thead th {
+                border: none;
+                padding: 15px 12px;
+                font-weight: 600;
+                vertical-align: middle;
+            }
+
+        .my-events-table tbody td {
+            padding: 15px 12px;
+            vertical-align: middle;
+            border-color: #e5e9ed;
+        }
+
+        .my-events-table tbody tr:hover {
+            background: #f8fbfe;
+        }
+
+
+    /* ===============================
+       EVENT NAME
+    =============================== */
+
+    .event-name {
+        color: #123456;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+
+    /* ===============================
+       STATUS
+    =============================== */
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-approved {
+        background: #e7f7ef;
+        color: #198754;
+    }
+
+    .status-pending {
+        background: #fff4d6;
+        color: #b77900;
+    }
+
+    .status-rejected {
+        background: #fdeaea;
+        color: #dc3545;
+    }
+
+    .status-disabled {
+        background: #f0f2f4;
+        color: #6c757d;
+    }
+
+    .status-cancelled {
+        background: #eceff1;
+        color: #6c757d;
+    }
+
+
+    /* ===============================
+       DATE
+    =============================== */
+
+    .register-date {
+        color: #495057;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+
+    /* ===============================
+       COMPLETED
+    =============================== */
+
+    .completed-label {
+        display: inline-block;
+        margin-left: 6px;
+        color: #198754;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+
+    /* ===============================
+       MOBILE
+    =============================== */
+
+    @@media (max-width: 768px) {
+
+        .my-events-table {
+            min-width: 900px;
+        }
+
+        .my-events-page {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+</style>

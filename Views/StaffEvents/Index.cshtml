@@ -1,0 +1,191 @@
+﻿@model IEnumerable<quanlySukien.Models.@event>
+
+@{
+    ViewBag.Title = "Quản lý sự kiện";
+}
+
+<div class="container">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 style="color:#005baa; font-weight:700;">
+                Quản lý sự kiện
+            </h2>
+
+            <p class="text-muted mb-0">
+                Các sự kiện thuộc đơn vị của bạn
+            </p>
+        </div>
+
+        <div>
+            @Html.ActionLink(
+                "＋ Tạo sự kiện",
+                "Create",
+                "StaffEvents",
+                null,
+                new
+                {
+                    @class = "btn btn-primary"
+                }
+            )
+        </div>
+
+    </div>
+
+
+    <!-- THÔNG BÁO -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+    <!-- DANH SÁCH -->
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover bg-white">
+
+                <thead style="background:#005baa; color:#fff;">
+
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên sự kiện</th>
+                        <th>Địa điểm</th>
+                        <th>Thời gian</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                @item.id
+                            </td>
+
+                            <td>
+                                <strong style="color:#005baa;">
+                                    @item.title
+                                </strong>
+                            </td>
+
+                            <td>
+                                @item.location
+                            </td>
+
+                            <td>
+                                @item.start_time.ToString("dd/MM/yyyy HH:mm")
+                            </td>
+
+                            <td>
+
+                                @if (item.status == "pending")
+                                {
+                                    <span class="badge badge-warning">
+                                        Chờ duyệt
+                                    </span>
+                                }
+                                else if (item.status == "approved")
+                                {
+                                    <span class="badge badge-success">
+                                        Đã duyệt
+                                    </span>
+                                }
+                                else if (item.status == "rejected")
+                                {
+                                    <span class="badge badge-danger">
+                                        Từ chối
+                                    </span>
+                                }
+                                else if (item.status == "cancelled")
+                                {
+                                    <span class="badge badge-secondary">
+                                        Đã hủy
+                                    </span>
+                                }
+                                else if (item.status == "finished")
+                                {
+                                    <span class="badge badge-info">
+                                        Đã kết thúc
+                                    </span>
+                                }
+
+                            </td>
+
+                            <td>
+
+                                @Html.ActionLink(
+                                    "Xem",
+                                    "Details",
+                                    "StaffEvents",
+                                    new { id = item.id },
+                                    new
+                                    {
+                                        @class = "btn btn-sm btn-outline-primary mr-1"
+                                    }
+                                )
+
+                                @Html.ActionLink(
+                                    "Sửa",
+                                    "Edit",
+                                    "StaffEvents",
+                                    new { id = item.id },
+                                    new
+                                    {
+                                        @class = "btn btn-sm btn-outline-success mr-1"
+                                    }
+                                )
+
+
+
+                                @Html.ActionLink(
+                                     "Xóa",
+                                     "Delete",
+                                     "StaffEvents",
+                                     new { id = item.id },
+                                     new
+                                     {
+                                        @class = "btn btn-sm btn-outline-danger"
+                                     }
+                                )
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+
+            Đơn vị của bạn chưa có sự kiện nào.
+
+        </div>
+    }
+
+</div>

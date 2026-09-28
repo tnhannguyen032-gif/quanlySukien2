@@ -1,0 +1,229 @@
+﻿@{
+    ViewBag.Title = "Tạo tài khoản Staff";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+                        Tạo tài khoản Staff
+                    </h4>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div class="alert alert-info">
+
+                        <strong>Lưu ý:</strong>
+                        Tài khoản được tạo tại đây sẽ tự động có vai trò
+                        <strong>Cán bộ (Staff)</strong>.
+                        Người tạo không thể tự chọn quyền Admin.
+
+                    </div>
+
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+
+                    @using (Html.BeginForm(
+                        "CreateStaff",
+                        "Users",
+                        new { area = "Admin" },
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- TÊN ĐĂNG NHẬP -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Tên đăng nhập
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   name="username"
+                                   class="form-control"
+                                   placeholder="Ví dụ: canbo_cntt"
+                                   value="@Request.Form["username"]"
+                                   required />
+
+                        </div>
+
+
+                        <div class="row">
+
+                            <!-- MẬT KHẨU -->
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label class="font-weight-bold">
+                                        Mật khẩu
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="password"
+                                           name="password"
+                                           class="form-control"
+                                           placeholder="Ít nhất 6 ký tự"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+
+                            <!-- XÁC NHẬN -->
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label class="font-weight-bold">
+                                        Xác nhận mật khẩu
+                                        <span class="text-danger">*</span>
+                                    </label>
+
+                                    <input type="password"
+                                           name="confirmPassword"
+                                           class="form-control"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- HỌ TÊN -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Họ và tên
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   name="full_name"
+                                   class="form-control"
+                                   placeholder="Nhập họ tên cán bộ"
+                                   value="@Request.Form["full_name"]"
+                                   required />
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Email
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="example@tdmu.edu.vn"
+                                   value="@Request.Form["email"]"
+                                   required />
+
+                        </div>
+
+
+                        <!-- SỐ ĐIỆN THOẠI -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Số điện thoại
+                            </label>
+
+                            <input type="text"
+                                   name="phone"
+                                   class="form-control"
+                                   placeholder="Nhập số điện thoại"
+                                   value="@Request.Form["phone"]" />
+
+                        </div>
+
+
+                        <!-- ĐƠN VỊ -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Đơn vị công tác
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            @Html.DropDownList(
+                                "department_id",
+                                ViewBag.DepartmentList as SelectList,
+                                "-- Chọn đơn vị --",
+                                new
+                                {
+                                    @class = "form-control",
+                                    required = "required"
+                                }
+                            )
+
+                            <small class="form-text text-muted">
+                                Staff chỉ được quản lý các sự kiện thuộc đơn vị
+                                được phân công.
+                            </small>
+
+                        </div>
+
+
+                        <hr class="mt-4" />
+
+
+                        <div class="d-flex justify-content-between">
+
+                            @Html.ActionLink(
+                                "← Quay lại",
+                                "Index",
+                                "Users",
+                                new { area = "Admin" },
+                                new
+                                {
+                                    @class = "btn btn-outline-secondary"
+                                }
+                            )
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                Tạo tài khoản Staff
+
+                            </button>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

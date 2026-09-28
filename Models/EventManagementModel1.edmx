@@ -1,0 +1,1014 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="event_managementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="attendance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="registration_id" Type="int" Nullable="false" />
+          <Property Name="qr_code" Type="nvarchar" MaxLength="255" />
+          <Property Name="check_in_time" Type="datetime" />
+          <Property Name="photo" Type="nvarchar" MaxLength="500" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="benefits">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="benefit_type" Type="nvarchar" MaxLength="100" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="departments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="500" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="event_benefits">
+          <Key>
+            <PropertyRef Name="event_id" />
+            <PropertyRef Name="benefit_id" />
+          </Key>
+          <Property Name="event_id" Type="int" Nullable="false" />
+          <Property Name="benefit_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="event_categories">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="500" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="event_images">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="event_id" Type="int" Nullable="false" />
+          <Property Name="image_url" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="caption" Type="nvarchar" MaxLength="300" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="events">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="category_id" Type="int" Nullable="false" />
+          <Property Name="department_id" Type="int" Nullable="false" />
+          <Property Name="created_by" Type="int" Nullable="false" />
+          <Property Name="location" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="start_time" Type="datetime" Nullable="false" />
+          <Property Name="end_time" Type="datetime" Nullable="false" />
+          <Property Name="registration_deadline" Type="datetime" />
+          <Property Name="max_participants" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="rejection_reason" Type="nvarchar" MaxLength="500" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="updated_at" Type="datetime" />
+        </EntityType>
+        <EntityType Name="feedbacks">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="event_id" Type="int" Nullable="false" />
+          <Property Name="rating" Type="int" Nullable="false" />
+          <Property Name="comment" Type="nvarchar" MaxLength="1000" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="notifications">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="message" Type="nvarchar" MaxLength="1000" Nullable="false" />
+          <Property Name="is_read" Type="bit" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="registrations">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="event_id" Type="int" Nullable="false" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="registered_at" Type="datetime" Nullable="false" />
+          <Property Name="approved_at" Type="datetime" />
+          <Property Name="approved_by" Type="int" />
+          <Property Name="rejection_reason" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="student_profiles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="student_code" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="class_name" Type="nvarchar" MaxLength="100" />
+          <Property Name="major" Type="nvarchar" MaxLength="150" />
+          <Property Name="faculty" Type="nvarchar" MaxLength="150" />
+          <Property Name="birth_date" Type="date" />
+          <Property Name="address" Type="nvarchar" MaxLength="300" />
+          <Property Name="avatar" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="full_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="role" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="department_id" Type="int" />
+          <Property Name="status" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_attendance_registrations">
+          <End Role="registrations" Type="Self.registrations" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="attendance" Type="Self.attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registrations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attendance">
+              <PropertyRef Name="registration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_event_benefits_benefits">
+          <End Role="benefits" Type="Self.benefits" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="event_benefits" Type="Self.event_benefits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="benefits">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="event_benefits">
+              <PropertyRef Name="benefit_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_event_benefits_events">
+          <End Role="events" Type="Self.events" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="event_benefits" Type="Self.event_benefits" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="event_benefits">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_event_images_events">
+          <End Role="events" Type="Self.events" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="event_images" Type="Self.event_images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="event_images">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_events_categories">
+          <End Role="event_categories" Type="Self.event_categories" Multiplicity="1" />
+          <End Role="events" Type="Self.events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="event_categories">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="events">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_events_created_by">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="events" Type="Self.events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="events">
+              <PropertyRef Name="created_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_events_departments">
+          <End Role="departments" Type="Self.departments" Multiplicity="1" />
+          <End Role="events" Type="Self.events" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="events">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_feedbacks_events">
+          <End Role="events" Type="Self.events" Multiplicity="1" />
+          <End Role="feedbacks" Type="Self.feedbacks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="feedbacks">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_feedbacks_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="feedbacks" Type="Self.feedbacks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="feedbacks">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notifications_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notifications" Type="Self.notifications" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notifications">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registrations_approved_by">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="registrations" Type="Self.registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="registrations">
+              <PropertyRef Name="approved_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registrations_events">
+          <End Role="events" Type="Self.events" Multiplicity="1" />
+          <End Role="registrations" Type="Self.registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="registrations">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registrations_users">
+          <End Role="users" Type="Self.users" Multiplicity="1" />
+          <End Role="registrations" Type="Self.registrations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="registrations">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_student_profiles_users">
+          <End Role="users" Type="Self.users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="student_profiles" Type="Self.student_profiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="student_profiles">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_departments">
+          <End Role="departments" Type="Self.departments" Multiplicity="0..1" />
+          <End Role="users" Type="Self.users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="event_managementModelStoreContainer">
+          <EntitySet Name="attendance" EntityType="Self.attendance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="benefits" EntityType="Self.benefits" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="departments" EntityType="Self.departments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="event_benefits" EntityType="Self.event_benefits" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="event_categories" EntityType="Self.event_categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="event_images" EntityType="Self.event_images" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="events" EntityType="Self.events" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="feedbacks" EntityType="Self.feedbacks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="notifications" EntityType="Self.notifications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="registrations" EntityType="Self.registrations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="student_profiles" EntityType="Self.student_profiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_attendance_registrations" Association="Self.FK_attendance_registrations">
+            <End Role="registrations" EntitySet="registrations" />
+            <End Role="attendance" EntitySet="attendance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_event_benefits_benefits" Association="Self.FK_event_benefits_benefits">
+            <End Role="benefits" EntitySet="benefits" />
+            <End Role="event_benefits" EntitySet="event_benefits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_event_benefits_events" Association="Self.FK_event_benefits_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="event_benefits" EntitySet="event_benefits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_event_images_events" Association="Self.FK_event_images_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="event_images" EntitySet="event_images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_events_categories" Association="Self.FK_events_categories">
+            <End Role="event_categories" EntitySet="event_categories" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_events_created_by" Association="Self.FK_events_created_by">
+            <End Role="users" EntitySet="users" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_events_departments" Association="Self.FK_events_departments">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_feedbacks_events" Association="Self.FK_feedbacks_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="feedbacks" EntitySet="feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_feedbacks_users" Association="Self.FK_feedbacks_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="feedbacks" EntitySet="feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notifications_users" Association="Self.FK_notifications_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="notifications" EntitySet="notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registrations_approved_by" Association="Self.FK_registrations_approved_by">
+            <End Role="users" EntitySet="users" />
+            <End Role="registrations" EntitySet="registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registrations_events" Association="Self.FK_registrations_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="registrations" EntitySet="registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registrations_users" Association="Self.FK_registrations_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="registrations" EntitySet="registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_student_profiles_users" Association="Self.FK_student_profiles_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="student_profiles" EntitySet="student_profiles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_departments" Association="Self.FK_users_departments">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="event_managementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="attendance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="registration_id" Type="Int32" Nullable="false" />
+          <Property Name="qr_code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="check_in_time" Type="DateTime" Precision="3" />
+          <Property Name="photo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="registration" Relationship="Self.FK_attendance_registrations" FromRole="attendance" ToRole="registrations" />
+        </EntityType>
+        <EntityType Name="benefit">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="benefit_type" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="events" Relationship="Self.event_benefits" FromRole="benefits" ToRole="events" />
+        </EntityType>
+        <EntityType Name="department">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="events" Relationship="Self.FK_events_departments" FromRole="departments" ToRole="events" />
+          <NavigationProperty Name="users" Relationship="Self.FK_users_departments" FromRole="departments" ToRole="users" />
+        </EntityType>
+        <EntityType Name="event_categories">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="events" Relationship="Self.FK_events_categories" FromRole="event_categories" ToRole="events" />
+        </EntityType>
+        <EntityType Name="event_images">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="event_id" Type="Int32" Nullable="false" />
+          <Property Name="image_url" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="caption" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="event" Relationship="Self.FK_event_images_events" FromRole="event_images" ToRole="events" />
+        </EntityType>
+        <EntityType Name="event">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="category_id" Type="Int32" Nullable="false" />
+          <Property Name="department_id" Type="Int32" Nullable="false" />
+          <Property Name="created_by" Type="Int32" Nullable="false" />
+          <Property Name="location" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="start_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="end_time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="registration_deadline" Type="DateTime" Precision="3" />
+          <Property Name="max_participants" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="rejection_reason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="department" Relationship="Self.FK_events_departments" FromRole="events" ToRole="departments" />
+          <NavigationProperty Name="event_categories" Relationship="Self.FK_events_categories" FromRole="events" ToRole="event_categories" />
+          <NavigationProperty Name="event_images" Relationship="Self.FK_event_images_events" FromRole="events" ToRole="event_images" />
+          <NavigationProperty Name="user" Relationship="Self.FK_events_created_by" FromRole="events" ToRole="users" />
+          <NavigationProperty Name="feedbacks" Relationship="Self.FK_feedbacks_events" FromRole="events" ToRole="feedbacks" />
+          <NavigationProperty Name="registrations" Relationship="Self.FK_registrations_events" FromRole="events" ToRole="registrations" />
+          <NavigationProperty Name="benefits" Relationship="Self.event_benefits" FromRole="events" ToRole="benefits" />
+        </EntityType>
+        <EntityType Name="feedback">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="event_id" Type="Int32" Nullable="false" />
+          <Property Name="rating" Type="Int32" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="event" Relationship="Self.FK_feedbacks_events" FromRole="feedbacks" ToRole="events" />
+          <NavigationProperty Name="user" Relationship="Self.FK_feedbacks_users" FromRole="feedbacks" ToRole="users" />
+        </EntityType>
+        <EntityType Name="notification">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="message" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="is_read" Type="Boolean" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="user" Relationship="Self.FK_notifications_users" FromRole="notifications" ToRole="users" />
+        </EntityType>
+        <EntityType Name="registration">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="event_id" Type="Int32" Nullable="false" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="registered_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="approved_at" Type="DateTime" Precision="3" />
+          <Property Name="approved_by" Type="Int32" />
+          <Property Name="rejection_reason" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="attendances" Relationship="Self.FK_attendance_registrations" FromRole="registrations" ToRole="attendance" />
+          <NavigationProperty Name="event" Relationship="Self.FK_registrations_events" FromRole="registrations" ToRole="events" />
+          <NavigationProperty Name="user" Relationship="Self.FK_registrations_approved_by" FromRole="registrations" ToRole="users" />
+          <NavigationProperty Name="user1" Relationship="Self.FK_registrations_users" FromRole="registrations" ToRole="users" />
+        </EntityType>
+        <EntityType Name="student_profiles">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="student_code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="class_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="major" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="faculty" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="birth_date" Type="DateTime" Precision="0" />
+          <Property Name="address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="avatar" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="user" Relationship="Self.FK_student_profiles_users" FromRole="student_profiles" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="department_id" Type="Int32" />
+          <Property Name="status" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="department" Relationship="Self.FK_users_departments" FromRole="users" ToRole="departments" />
+          <NavigationProperty Name="events" Relationship="Self.FK_events_created_by" FromRole="users" ToRole="events" />
+          <NavigationProperty Name="feedbacks" Relationship="Self.FK_feedbacks_users" FromRole="users" ToRole="feedbacks" />
+          <NavigationProperty Name="notifications" Relationship="Self.FK_notifications_users" FromRole="users" ToRole="notifications" />
+          <NavigationProperty Name="registrations" Relationship="Self.FK_registrations_approved_by" FromRole="users" ToRole="registrations" />
+          <NavigationProperty Name="registrations1" Relationship="Self.FK_registrations_users" FromRole="users" ToRole="registrations" />
+          <NavigationProperty Name="student_profiles" Relationship="Self.FK_student_profiles_users" FromRole="users" ToRole="student_profiles" />
+        </EntityType>
+        <Association Name="FK_attendance_registrations">
+          <End Role="registrations" Type="Self.registration" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="attendance" Type="Self.attendance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="registrations">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="attendance">
+              <PropertyRef Name="registration_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_events_departments">
+          <End Role="departments" Type="Self.department" Multiplicity="1" />
+          <End Role="events" Type="Self.event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="events">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_users_departments">
+          <End Role="departments" Type="Self.department" Multiplicity="0..1" />
+          <End Role="users" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="departments">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="users">
+              <PropertyRef Name="department_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_events_categories">
+          <End Role="event_categories" Type="Self.event_categories" Multiplicity="1" />
+          <End Role="events" Type="Self.event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="event_categories">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="events">
+              <PropertyRef Name="category_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_event_images_events">
+          <End Role="events" Type="Self.event" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="event_images" Type="Self.event_images" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="event_images">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_events_created_by">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="events" Type="Self.event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="events">
+              <PropertyRef Name="created_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_feedbacks_events">
+          <End Role="events" Type="Self.event" Multiplicity="1" />
+          <End Role="feedbacks" Type="Self.feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="feedbacks">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registrations_events">
+          <End Role="events" Type="Self.event" Multiplicity="1" />
+          <End Role="registrations" Type="Self.registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="events">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="registrations">
+              <PropertyRef Name="event_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_feedbacks_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="feedbacks" Type="Self.feedback" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="feedbacks">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_notifications_users">
+          <End Role="users" Type="Self.user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="notifications" Type="Self.notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="notifications">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registrations_approved_by">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="registrations" Type="Self.registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="registrations">
+              <PropertyRef Name="approved_by" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_registrations_users">
+          <End Role="users" Type="Self.user" Multiplicity="1" />
+          <End Role="registrations" Type="Self.registration" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="registrations">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_student_profiles_users">
+          <End Role="users" Type="Self.user" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="student_profiles" Type="Self.student_profiles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="student_profiles">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="event_benefits">
+          <End Role="benefits" Type="Self.benefit" Multiplicity="*" />
+          <End Role="events" Type="Self.event" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="event_managementEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="attendances" EntityType="Self.attendance" />
+          <EntitySet Name="benefits" EntityType="Self.benefit" />
+          <EntitySet Name="departments" EntityType="Self.department" />
+          <EntitySet Name="event_categories" EntityType="Self.event_categories" />
+          <EntitySet Name="event_images" EntityType="Self.event_images" />
+          <EntitySet Name="events" EntityType="Self.event" />
+          <EntitySet Name="feedbacks" EntityType="Self.feedback" />
+          <EntitySet Name="notifications" EntityType="Self.notification" />
+          <EntitySet Name="registrations" EntityType="Self.registration" />
+          <EntitySet Name="student_profiles" EntityType="Self.student_profiles" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK_attendance_registrations" Association="Self.FK_attendance_registrations">
+            <End Role="registrations" EntitySet="registrations" />
+            <End Role="attendance" EntitySet="attendances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_events_departments" Association="Self.FK_events_departments">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_users_departments" Association="Self.FK_users_departments">
+            <End Role="departments" EntitySet="departments" />
+            <End Role="users" EntitySet="users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_events_categories" Association="Self.FK_events_categories">
+            <End Role="event_categories" EntitySet="event_categories" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_event_images_events" Association="Self.FK_event_images_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="event_images" EntitySet="event_images" />
+          </AssociationSet>
+          <AssociationSet Name="FK_events_created_by" Association="Self.FK_events_created_by">
+            <End Role="users" EntitySet="users" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+          <AssociationSet Name="FK_feedbacks_events" Association="Self.FK_feedbacks_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="feedbacks" EntitySet="feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registrations_events" Association="Self.FK_registrations_events">
+            <End Role="events" EntitySet="events" />
+            <End Role="registrations" EntitySet="registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_feedbacks_users" Association="Self.FK_feedbacks_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="feedbacks" EntitySet="feedbacks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_notifications_users" Association="Self.FK_notifications_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="notifications" EntitySet="notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registrations_approved_by" Association="Self.FK_registrations_approved_by">
+            <End Role="users" EntitySet="users" />
+            <End Role="registrations" EntitySet="registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_registrations_users" Association="Self.FK_registrations_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="registrations" EntitySet="registrations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_student_profiles_users" Association="Self.FK_student_profiles_users">
+            <End Role="users" EntitySet="users" />
+            <End Role="student_profiles" EntitySet="student_profiles" />
+          </AssociationSet>
+          <AssociationSet Name="event_benefits" Association="Self.event_benefits">
+            <End Role="benefits" EntitySet="benefits" />
+            <End Role="events" EntitySet="events" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="event_managementModelStoreContainer" CdmEntityContainer="event_managementEntities">
+          <EntitySetMapping Name="attendances">
+            <EntityTypeMapping TypeName="event_managementModel.attendance">
+              <MappingFragment StoreEntitySet="attendance">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="registration_id" ColumnName="registration_id" />
+                <ScalarProperty Name="qr_code" ColumnName="qr_code" />
+                <ScalarProperty Name="check_in_time" ColumnName="check_in_time" />
+                <ScalarProperty Name="photo" ColumnName="photo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="benefits">
+            <EntityTypeMapping TypeName="event_managementModel.benefit">
+              <MappingFragment StoreEntitySet="benefits">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="benefit_type" ColumnName="benefit_type" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="departments">
+            <EntityTypeMapping TypeName="event_managementModel.department">
+              <MappingFragment StoreEntitySet="departments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="event_categories">
+            <EntityTypeMapping TypeName="event_managementModel.event_categories">
+              <MappingFragment StoreEntitySet="event_categories">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="event_images">
+            <EntityTypeMapping TypeName="event_managementModel.event_images">
+              <MappingFragment StoreEntitySet="event_images">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="image_url" ColumnName="image_url" />
+                <ScalarProperty Name="caption" ColumnName="caption" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="events">
+            <EntityTypeMapping TypeName="event_managementModel.event">
+              <MappingFragment StoreEntitySet="events">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="category_id" ColumnName="category_id" />
+                <ScalarProperty Name="department_id" ColumnName="department_id" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="start_time" ColumnName="start_time" />
+                <ScalarProperty Name="end_time" ColumnName="end_time" />
+                <ScalarProperty Name="registration_deadline" ColumnName="registration_deadline" />
+                <ScalarProperty Name="max_participants" ColumnName="max_participants" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="rejection_reason" ColumnName="rejection_reason" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="feedbacks">
+            <EntityTypeMapping TypeName="event_managementModel.feedback">
+              <MappingFragment StoreEntitySet="feedbacks">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="rating" ColumnName="rating" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="notifications">
+            <EntityTypeMapping TypeName="event_managementModel.notification">
+              <MappingFragment StoreEntitySet="notifications">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="is_read" ColumnName="is_read" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="registrations">
+            <EntityTypeMapping TypeName="event_managementModel.registration">
+              <MappingFragment StoreEntitySet="registrations">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="event_id" ColumnName="event_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="registered_at" ColumnName="registered_at" />
+                <ScalarProperty Name="approved_at" ColumnName="approved_at" />
+                <ScalarProperty Name="approved_by" ColumnName="approved_by" />
+                <ScalarProperty Name="rejection_reason" ColumnName="rejection_reason" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="student_profiles">
+            <EntityTypeMapping TypeName="event_managementModel.student_profiles">
+              <MappingFragment StoreEntitySet="student_profiles">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="student_code" ColumnName="student_code" />
+                <ScalarProperty Name="class_name" ColumnName="class_name" />
+                <ScalarProperty Name="major" ColumnName="major" />
+                <ScalarProperty Name="faculty" ColumnName="faculty" />
+                <ScalarProperty Name="birth_date" ColumnName="birth_date" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="avatar" ColumnName="avatar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="event_managementModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="full_name" ColumnName="full_name" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="department_id" ColumnName="department_id" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="event_benefits" TypeName="event_managementModel.event_benefits" StoreEntitySet="event_benefits">
+            <EndProperty Name="benefits">
+              <ScalarProperty Name="id" ColumnName="benefit_id" />
+            </EndProperty>
+            <EndProperty Name="events">
+              <ScalarProperty Name="id" ColumnName="event_id" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,241 @@
+﻿@model IEnumerable<quanlySukien.Models.department>
+
+@{
+    ViewBag.Title = "Quản lý đơn vị";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="font-weight-bold text-primary mb-1">
+                Quản lý đơn vị
+            </h2>
+
+            <p class="text-muted mb-0">
+                Quản lý các đơn vị trong hệ thống.
+            </p>
+        </div>
+
+        <div>
+            @Html.ActionLink(
+                "＋ Thêm đơn vị",
+                "Create",
+                "Departments",
+                new { area = "Admin" },
+                new
+                {
+                    @class = "btn btn-primary"
+                }
+            )
+        </div>
+
+    </div>
+
+
+    <!-- THỐNG KÊ -->
+    <div class="row mb-4">
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Tổng số đơn vị
+                    </small>
+
+                    <h3 class="font-weight-bold text-primary mt-2 mb-0">
+                        @ViewBag.TotalDepartments
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- THÔNG BÁO -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- TÌM KIẾM -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            @using (Html.BeginForm(
+                "Index",
+                "Departments",
+                new { area = "Admin" },
+                FormMethod.Get))
+            {
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <label class="font-weight-bold">
+                            Tìm kiếm đơn vị
+                        </label>
+
+                        <input type="text"
+                               name="keyword"
+                               value="@ViewBag.Keyword"
+                               class="form-control"
+                               placeholder="Nhập tên đơn vị..." />
+
+                    </div>
+
+                    <div class="col-md-2 d-flex align-items-end">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+
+                            Tìm kiếm
+
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- DANH SÁCH -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="thead-light">
+
+                        <tr>
+
+                            <th style="width:80px;">
+                                STT
+                            </th>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Tên đơn vị
+                            </th>
+
+                            <th style="width:130px;">
+                                Thao tác
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            int stt = 1;
+
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @stt
+                                    </td>
+
+                                    <td>
+                                        @item.id
+                                    </td>
+
+                                    <td>
+
+                                        <strong class="text-primary">
+                                            @item.name
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+
+                                        @Html.ActionLink(
+                                            "Sửa",
+                                            "Edit",
+                                            "Departments",
+                                            new
+                                            {
+                                                area = "Admin",
+                                                id = item.id
+                                            },
+                                            new
+                                            {
+                                                @class =
+                                                    "btn btn-sm btn-outline-primary"
+                                            }
+                                        )
+
+                                    </td>
+
+                                </tr>
+
+                                stt++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="4"
+                                    class="text-center py-5">
+
+                                    <h5 class="text-muted">
+                                        Không có đơn vị nào.
+                                    </h5>
+
+                                    <p class="text-muted">
+                                        Hãy thêm đơn vị mới.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

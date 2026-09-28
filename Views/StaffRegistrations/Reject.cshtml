@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Từ chối đăng ký";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h3 style="color:#dc3545; font-weight:700;">
+                        Từ chối đăng ký
+                    </h3>
+
+                    <hr />
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    <p>
+                        <strong>Sự kiện:</strong>
+                        @ViewBag.EventTitle
+                    </p>
+
+                    <p>
+                        Bạn có chắc chắn muốn từ chối đăng ký này?
+                    </p>
+
+                    @using (Html.BeginForm(
+                        "Reject",
+                        "StaffRegistrations",
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@ViewBag.Registration.id" />
+
+                        <div class="form-group">
+
+                            <label>
+                                Lý do từ chối
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <textarea name="rejection_reason"
+                                      class="form-control"
+                                      rows="5"
+                                      placeholder="Nhập lý do từ chối..."
+                                      required></textarea>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-danger">
+
+                            Xác nhận từ chối
+
+                        </button>
+
+                        @Html.ActionLink(
+                            "Hủy",
+                            "Index",
+                            "StaffRegistrations",
+                            null,
+                            new
+                            {
+                                @class = "btn btn-outline-secondary ml-2"
+                            }
+                        )
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

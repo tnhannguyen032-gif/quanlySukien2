@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>
+        @ViewBag.Title - Admin
+    </title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <style>
+
+        body {
+            margin: 0;
+            background: #f4f7fa;
+            font-family: Arial, sans-serif;
+        }
+
+        /* ===== TOP BAR ===== */
+
+        .admin-topbar {
+            height: 60px;
+            background: #005baa;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .admin-brand {
+            color: white;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+            .admin-brand:hover {
+                color: white;
+                text-decoration: none;
+            }
+
+            .admin-brand i {
+                margin-right: 8px;
+            }
+
+        .admin-home {
+            margin-left: auto;
+            color: white;
+            text-decoration: none;
+        }
+
+            .admin-home:hover {
+                color: #eaf4fc;
+                text-decoration: none;
+            }
+
+        /* ===== SIDEBAR ===== */
+
+        .admin-sidebar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+            width: 240px;
+            background: white;
+            border-right: 1px solid #e1e5e8;
+            padding-top: 15px;
+        }
+
+        .admin-sidebar-title {
+            padding: 10px 20px;
+            color: #8a959e;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .admin-sidebar a {
+            display: block;
+            padding: 13px 20px;
+            color: #34495e;
+            text-decoration: none;
+        }
+
+            .admin-sidebar a:hover {
+                background: #eef5fb;
+                color: #005baa;
+                text-decoration: none;
+            }
+
+            .admin-sidebar a i {
+                width: 25px;
+            }
+
+        .admin-user {
+            margin-right: 25px;
+            color: white;
+            font-size: 14px;
+        }
+
+            .admin-user i {
+                font-size: 20px;
+                margin-right: 6px;
+            }
+
+        .admin-home {
+            margin-right: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+            .admin-home:hover {
+                color: #eaf4fc;
+                text-decoration: none;
+            }
+
+        .admin-logout {
+            color: white;
+            text-decoration: none;
+        }
+
+            .admin-logout:hover {
+                color: #ffe0e0;
+                text-decoration: none;
+            }
+        /* ===== CONTENT ===== */
+
+        .admin-content {
+            margin-left: 240px;
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+        }
+
+        @@media (max-width: 768px) {
+
+            .admin-sidebar {
+                width: 200px;
+            }
+
+            .admin-content {
+                margin-left: 200px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- TOPBAR -->
+
+    <header class="admin-topbar">
+
+        <a href="@Url.Action(
+            "Index",
+            "Dashboard",
+            new { area = "Admin" })"
+           class="admin-brand">
+
+            <i class="fa fa-cogs"></i>
+            TDMU EVENT - ADMIN
+
+        </a>
+
+        <<div class="admin-user">
+
+            <i class="fa fa-user-circle"></i>
+
+            <span>
+                Xin chào,
+                <strong>
+                    @Session["FullName"]
+                </strong>
+            </span>
+
+        </div>
+
+        <a href="@Url.Action(
+    "Logout",
+    "Account",
+    new { area = "" })"
+           class="admin-logout">
+
+            <i class="fa fa-sign-out"></i>
+            Đăng xuất
+
+        </a>
+
+    </header>
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="admin-sidebar">
+
+        <div class="admin-sidebar-title">
+            Quản lý hệ thống
+        </div>
+
+
+        <a href="@Url.Action(
+            "Index",
+            "Dashboard",
+            new { area = "Admin" })">
+
+            <i class="fa fa-dashboard"></i>
+            Dashboard
+
+        </a>
+
+
+        <a href="@Url.Action(
+            "Index",
+            "Users",
+            new { area = "Admin" })">
+
+            <i class="fa fa-users"></i>
+            Người dùng
+
+        </a>
+
+
+        <a href="@Url.Action(
+            "Index",
+            "Departments",
+            new { area = "Admin" })">
+
+            <i class="fa fa-university"></i>
+            Khoa / Viện
+
+        </a>
+
+
+        <a href="@Url.Action(
+            "Index",
+            "Categories",
+            new { area = "Admin" })">
+
+            <i class="fa fa-tags"></i>
+            Danh mục
+
+        </a>
+
+
+        <a href="@Url.Action(
+            "Index",
+            "Events",
+            new { area = "Admin" })">
+
+            <i class="fa fa-calendar"></i>
+            Sự kiện
+
+        </a>
+
+
+        <a href="@Url.Action(
+            "Index",
+            "Statistics",
+            new { area = "Admin" })">
+
+            <i class="fa fa-bar-chart"></i>
+            Thống kê
+
+        </a>
+
+    </aside>
+
+
+    <!-- NỘI DUNG -->
+
+    <main class="admin-content">
+
+        @RenderBody()
+
+    </main>
+
+
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>

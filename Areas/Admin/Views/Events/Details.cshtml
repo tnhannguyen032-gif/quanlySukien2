@@ -1,0 +1,682 @@
+﻿@model quanlySukien.Models.@event
+
+@{
+    ViewBag.Title = "Chi tiết sự kiện";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    var department = ViewBag.Department;
+    var creator = ViewBag.Creator;
+
+    int approvedCount = ViewBag.ApprovedCount ?? 0;
+    int pendingCount = ViewBag.PendingCount ?? 0;
+}
+
+<div class="admin-card">
+
+    <!-- =========================================
+         TIÊU ĐỀ
+    ========================================== -->
+
+    <div class="detail-header">
+
+        <div>
+
+            <h2>
+                <i class="fa fa-calendar"></i>
+                Chi tiết sự kiện
+            </h2>
+
+            <p>
+                Kiểm tra thông tin trước khi phê duyệt sự kiện.
+            </p>
+
+        </div>
+
+        <a href="@Url.Action("Index", "Events", new { area = "Admin" })"
+           class="btn btn-outline-secondary">
+
+            <i class="fa fa-arrow-left"></i>
+            Quay lại
+
+        </a>
+
+    </div>
+
+
+    <!-- =========================================
+         THÔNG TIN SỰ KIỆN
+    ========================================== -->
+
+    <div class="event-title-box">
+
+        <h3>
+            @Model.title
+        </h3>
+
+        @if (Model.status == "pending")
+        {
+            <span class="status status-pending">
+                <i class="fa fa-clock-o"></i>
+                Chờ duyệt
+            </span>
+        }
+        else if (Model.status == "approved")
+        {
+            <span class="status status-approved">
+                <i class="fa fa-check"></i>
+                Đã duyệt
+            </span>
+        }
+        else if (Model.status == "rejected")
+        {
+            <span class="status status-rejected">
+                <i class="fa fa-times"></i>
+                Đã từ chối
+            </span>
+        }
+        else
+        {
+            <span class="status status-other">
+                @Model.status
+            </span>
+        }
+
+    </div>
+
+
+    <div class="row">
+
+        <!-- =====================================
+             CỘT THÔNG TIN CHÍNH
+        ====================================== -->
+
+        <div class="col-lg-8">
+
+            <div class="info-section">
+
+                <h5>
+                    <i class="fa fa-info-circle"></i>
+                    Thông tin sự kiện
+                </h5>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Nội dung
+                    </div>
+
+                    <div class="info-value description">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.description))
+                        {
+                            @Model.description
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Chưa có nội dung.
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Địa điểm
+                    </div>
+
+                    <div class="info-value">
+
+                        <i class="fa fa-map-marker"></i>
+                        @Model.location
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Danh mục
+                    </div>
+
+                    <div class="info-value">
+
+                        @if (Model.event_categories != null)
+                        {
+                            @Model.event_categories.name
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Không xác định
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Đơn vị tổ chức
+                    </div>
+
+                    <div class="info-value">
+
+                        @if (department != null)
+                        {
+                            @department.name
+                        }
+                        else if (Model.department != null)
+                        {
+                            @Model.department.name
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Không xác định
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Người tạo
+                    </div>
+
+                    <div class="info-value">
+
+                        @if (creator != null)
+                        {
+                            @creator.full_name
+                        }
+                        else if (Model.user != null)
+                        {
+                            @Model.user.full_name
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                Không xác định
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Thời gian bắt đầu
+                    </div>
+
+                    <div class="info-value">
+                        @Model.start_time.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Thời gian kết thúc
+                    </div>
+
+                    <div class="info-value">
+                        @Model.end_time.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Hạn đăng ký
+                    </div>
+
+                    <div class="info-value">
+
+                        @if (Model.registration_deadline.HasValue)
+                        {
+                            @Model.registration_deadline.Value.ToString("dd/MM/yyyy HH:mm")
+                        }
+                        else
+                        {
+                            <span>
+                                Không giới hạn
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Số lượng tối đa
+                    </div>
+
+                    <div class="info-value">
+
+                        @if (Model.max_participants.HasValue)
+                        {
+                            @Model.max_participants
+                        }
+                        else
+                        {
+                            <span>
+                                Không giới hạn
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="info-row">
+
+                    <div class="info-label">
+                        Ngày tạo
+                    </div>
+
+                    <div class="info-value">
+                        @Model.created_at.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                @if (Model.updated_at.HasValue)
+                {
+                    <div class="info-row">
+
+                        <div class="info-label">
+                            Cập nhật lần cuối
+                        </div>
+
+                        <div class="info-value">
+                            @Model.updated_at.Value.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             CỘT XỬ LÝ
+        ====================================== -->
+
+        <div class="col-lg-4">
+
+            <div class="action-card">
+
+                <h5>
+                    <i class="fa fa-cogs"></i>
+                    Xử lý sự kiện
+                </h5>
+
+
+                <!-- THỐNG KÊ -->
+
+                <div class="stat-box">
+
+                    <div class="stat-item">
+
+                        <span>
+                            Đã duyệt
+                        </span>
+
+                        <strong>
+                            @approvedCount
+                        </strong>
+
+                    </div>
+
+
+                    <div class="stat-item">
+
+                        <span>
+                            Chờ duyệt
+                        </span>
+
+                        <strong>
+                            @pendingCount
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <hr />
+
+
+                @if (Model.status == "pending")
+                {
+                    <p class="text-muted">
+                        Sự kiện này đang chờ Admin kiểm tra.
+                    </p>
+
+
+                    <!-- DUYỆT -->
+
+                    using (Html.BeginForm(
+                        "Approve",
+                        "Events",
+                        new { area = "Admin", id = Model.id },
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-success btn-block"
+                                onclick="return confirm('Bạn có chắc muốn phê duyệt sự kiện này?');">
+
+                            <i class="fa fa-check"></i>
+                            Phê duyệt sự kiện
+
+                        </button>
+                    }
+
+
+                    <!-- TỪ CHỐI -->
+
+                    <div class="reject-box">
+
+                        <h6>
+                            Từ chối sự kiện
+                        </h6>
+
+                        <p class="text-muted small">
+                            Vui lòng nhập lý do từ chối.
+                        </p>
+
+
+                        using (Html.BeginForm(
+                        "Reject",
+                        "Events",
+                        new { area = "Admin", id = Model.id },
+                        FormMethod.Post))
+                        {
+                        @Html.AntiForgeryToken()
+
+                        <textarea name="rejection_reason"
+                                  class="form-control"
+                                  rows="4"
+                                  maxlength="500"
+                                  placeholder="Nhập lý do từ chối..."
+                                  required></textarea>
+
+                        <button type="submit"
+                                class="btn btn-danger btn-block mt-2">
+
+                            <i class="fa fa-times"></i>
+                            Từ chối sự kiện
+
+                        </button>
+                        }
+
+                    </div>
+                }
+                else if (Model.status == "approved")
+                {
+                    <div class="alert alert-success">
+
+                        <i class="fa fa-check-circle"></i>
+
+                        Sự kiện đã được Admin phê duyệt.
+
+                    </div>
+                }
+                else if (Model.status == "rejected")
+                {
+                    <div class="alert alert-danger">
+
+                        <i class="fa fa-times-circle"></i>
+
+                        Sự kiện đã bị từ chối.
+
+                    </div>
+
+
+                    if (!string.IsNullOrWhiteSpace(Model.rejection_reason))
+                    {
+                        <div class="rejection-box">
+
+                            <strong>
+                                Lý do từ chối:
+                            </strong>
+
+                            <p class="mb-0 mt-2">
+                                @Model.rejection_reason
+                            </p>
+
+                        </div>
+                    }
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<style>
+
+    .detail-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+        .detail-header h2 {
+            color: #005baa;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .detail-header p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+
+    .event-title-box {
+        background: #f4f8fc;
+        border: 1px solid #dce8f2;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+        .event-title-box h3 {
+            color: #123456;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+
+    .info-section {
+        background: #ffffff;
+        border: 1px solid #e3e7eb;
+        border-radius: 10px;
+        padding: 25px;
+    }
+
+        .info-section h5 {
+            color: #005baa;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+            .info-section h5 i {
+                margin-right: 7px;
+            }
+
+    .info-row {
+        display: flex;
+        border-bottom: 1px solid #edf0f2;
+        padding: 13px 0;
+    }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+    .info-label {
+        width: 180px;
+        flex-shrink: 0;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .info-value {
+        color: #343a40;
+        line-height: 1.6;
+    }
+
+    .description {
+        white-space: pre-line;
+    }
+
+
+    .action-card {
+        background: #ffffff;
+        border: 1px solid #e3e7eb;
+        border-radius: 10px;
+        padding: 25px;
+    }
+
+        .action-card h5 {
+            color: #005baa;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+            .action-card h5 i {
+                margin-right: 7px;
+            }
+
+
+    .stat-box {
+        background: #f8fafc;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+    }
+
+        .stat-item span {
+            color: #6c757d;
+        }
+
+        .stat-item strong {
+            color: #005baa;
+            font-size: 18px;
+        }
+
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 7px 11px;
+        border-radius: 6px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        background: #fff4d6;
+        color: #9a6700;
+    }
+
+    .status-approved {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+
+    .status-rejected {
+        background: #f8d7da;
+        color: #842029;
+    }
+
+    .status-other {
+        background: #e9ecef;
+        color: #495057;
+    }
+
+
+    .reject-box {
+        margin-top: 20px;
+    }
+
+        .reject-box h6 {
+            color: #842029;
+            font-weight: 700;
+        }
+
+    .rejection-box {
+        margin-top: 15px;
+        padding: 12px;
+        background: #fff5f5;
+        border: 1px solid #f1caca;
+        border-radius: 7px;
+        color: #842029;
+        line-height: 1.6;
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .detail-header {
+            display: block;
+        }
+
+            .detail-header .btn {
+                margin-top: 15px;
+            }
+
+        .info-row {
+            display: block;
+        }
+
+        .info-label {
+            width: auto;
+            margin-bottom: 5px;
+        }
+    }
+</style>

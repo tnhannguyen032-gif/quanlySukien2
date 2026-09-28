@@ -1,0 +1,170 @@
+﻿@model quanlySukien.Models.@event
+
+@{
+    ViewBag.Title = "Chi tiết sự kiện";
+}
+
+<div class="container">
+
+    <div class="card">
+
+        <div class="card-body">
+
+            <h2 style="color:#005baa; font-weight:700;">
+                @Model.title
+            </h2>
+
+            <hr />
+
+            <h5 style="color:#005baa;">
+                Nội dung sự kiện
+            </h5>
+
+            <p style="line-height:1.8; white-space:pre-line;">
+                @Model.description
+            </p>
+
+            <h5 style="color:#005baa; margin-top:30px;">
+                Thông tin sự kiện
+            </h5>
+
+            <div class="row mt-3">
+
+                <div class="col-md-6 mb-3">
+                    <strong>Địa điểm</strong>
+                    <div>@Model.location</div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Trạng thái</strong>
+                    <div>
+                        @if (Model.status == "pending")
+                        {
+                            <span class="badge badge-warning">
+                                Chờ duyệt
+                            </span>
+                        }
+                        else if (Model.status == "approved")
+                        {
+                            <span class="badge badge-success">
+                                Đã duyệt
+                            </span>
+                        }
+                        else if (Model.status == "rejected")
+                        {
+                            <span class="badge badge-danger">
+                                Từ chối
+                            </span>
+                        }
+                        else if (Model.status == "cancelled")
+                        {
+                            <span class="badge badge-secondary">
+                                Đã hủy
+                            </span>
+                        }
+                        else if (Model.status == "finished")
+                        {
+                            <span class="badge badge-info">
+                                Đã kết thúc
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Thời gian bắt đầu</strong>
+                    <div>
+                        @Model.start_time.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Thời gian kết thúc</strong>
+                    <div>
+                        @Model.end_time.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Hạn đăng ký</strong>
+                    <div>
+                        @if (Model.registration_deadline.HasValue)
+                        {
+                            @Model.registration_deadline.Value.ToString("dd/MM/yyyy HH:mm")
+                        }
+                        else
+                        {
+                            <span>Không giới hạn</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <strong>Số lượng tối đa</strong>
+                    <div>
+                        @if (Model.max_participants.HasValue)
+                        {
+                            @Model.max_participants
+                        }
+                        else
+                        {
+                            <span>Không giới hạn</span>
+                        }
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+
+                @Html.ActionLink(
+                    "Sửa sự kiện",
+                    "Edit",
+                    "StaffEvents",
+                    new { id = Model.id },
+                    new
+                    {
+                        @class = "btn btn-success mr-2"
+                    }
+                )
+
+                @Html.ActionLink(
+        "Quản lý đăng ký",
+        "Index",
+        "StaffRegistrations",
+        new { eventId = Model.id },
+        new
+        {
+            @class = "btn btn-primary mr-2"
+        }
+    )
+
+                @Html.ActionLink(
+                    "Điểm danh",
+                    "Index",
+                    "StaffAttendance",
+                    new { eventId = Model.id },
+                    new
+                    {
+                        @class = "btn btn-info mr-2"
+                    }
+                )
+
+                @Html.ActionLink(
+                    "Quay lại",
+                    "Index",
+                    "StaffEvents",
+                    null,
+                    new
+                    {
+                        @class = "btn btn-outline-secondary"
+                    }
+                )
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

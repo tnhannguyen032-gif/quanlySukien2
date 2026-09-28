@@ -1,0 +1,308 @@
+﻿@model IEnumerable<quanlySukien.Models.@event>
+
+@{
+    ViewBag.Title = "Sự kiện";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="text-center mb-4">
+        <h2 style="color:#005baa; font-weight:700;">
+            Sự kiện TDMU
+        </h2>
+
+        <p class="text-muted">
+            Khám phá các hoạt động và sự kiện dành cho sinh viên
+        </p>
+    </div>
+    <!-- =========================
+         BỘ LỌC SỰ KIỆN
+    ========================== -->
+
+    <div class="card filter-card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            <h5 class="filter-title">
+                <i class="fa fa-filter"></i>
+                Bộ lọc sự kiện
+            </h5>
+
+            @using (Html.BeginForm(
+                "Index",
+                "Events",
+                FormMethod.Get,
+                new { @class = "filter-form" }))
+            {
+                <div class="row">
+
+                    <!-- TỪ KHÓA -->
+
+                    <div class="col-md-4 mb-3">
+
+                        <label>
+                            Từ khóa
+                        </label>
+
+                        <input type="text"
+                               name="searchString"
+                               value="@ViewBag.SearchString"
+                               class="form-control"
+                               placeholder="Tên sự kiện hoặc địa điểm..." />
+
+                    </div>
+
+
+                    <!-- TRẠNG THÁI -->
+
+                    <div class="col-md-3 mb-3">
+
+                        <label>
+                            Trạng thái
+                        </label>
+
+                        <select name="filter"
+                                class="form-control">
+
+                            <option value=""
+                                    @(ViewBag.Filter == null || ViewBag.Filter == "" ? "selected" : "")>
+                                Tất cả
+                            </option>
+
+                            <option value="upcoming"
+                                    @(ViewBag.Filter == "upcoming" ? "selected" : "")>
+                                Sắp diễn ra
+                            </option>
+
+                            <option value="ongoing"
+                                    @(ViewBag.Filter == "ongoing" ? "selected" : "")>
+                                Đang diễn ra
+                            </option>
+
+                            <option value="past"
+                                    @(ViewBag.Filter == "past" ? "selected" : "")>
+                                Đã diễn ra
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TỪ NGÀY -->
+
+                    <div class="col-md-2 mb-3">
+
+                        <label>
+                            Từ ngày
+                        </label>
+
+                        <input type="date"
+                               name="fromDate"
+                               value="@ViewBag.FromDate"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- ĐẾN NGÀY -->
+
+                    <div class="col-md-2 mb-3">
+
+                        <label>
+                            Đến ngày
+                        </label>
+
+                        <input type="date"
+                               name="toDate"
+                               value="@ViewBag.ToDate"
+                               class="form-control" />
+
+                    </div>
+
+
+                    <!-- NÚT -->
+
+                    <div class="col-md-1 mb-3 d-flex align-items-end">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+
+                            <i class="fa fa-filter"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+
+            <!-- XÓA BỘ LỌC -->
+
+            <div class="mt-2">
+
+                <a href="@Url.Action("Index", "Events")"
+                   class="btn btn-sm btn-outline-secondary">
+
+                    <i class="fa fa-refresh"></i>
+                    Xóa bộ lọc
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+    <!-- TÌM KIẾM -->
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            @using (Html.BeginForm("Index", "Events", FormMethod.Get))
+            {
+                <div class="row">
+
+                    <div class="col-md-10">
+                        <input type="text"
+                               name="searchString"
+                               value="@ViewBag.SearchString"
+                               class="form-control"
+                               placeholder="Tìm theo tên sự kiện hoặc địa điểm..." />
+                    </div>
+
+                    <div class="col-md-2">
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+                            Tìm kiếm
+                        </button>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    
+
+    <!-- DANH SÁCH SỰ KIỆN -->
+    <div class="row">
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+
+                    <div class="card h-100">
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h5 class="card-title"
+                                style="color:#005baa; font-weight:700;">
+
+                                @item.title
+
+                            </h5>
+
+                            <p class="text-muted mb-2">
+
+                                <strong>Địa điểm:</strong>
+                                @item.location
+
+                            </p>
+
+                            <p class="text-muted mb-2">
+
+                                <strong>Thời gian:</strong>
+
+                                @item.start_time.ToString("dd/MM/yyyy HH:mm")
+
+                            </p>
+
+                            @if (item.registration_deadline.HasValue)
+                            {
+                                <p class="text-muted mb-3">
+
+                                    <strong>Hạn đăng ký:</strong>
+
+                                    @item.registration_deadline.Value.ToString("dd/MM/yyyy HH:mm")
+
+                                </p>
+                            }
+
+                            <div class="mt-auto">
+
+                                @Html.ActionLink(
+                                    "Xem chi tiết",
+                                    "Details",
+                                    "Events",
+                                    new { id = item.id },
+                                    new
+                                    {
+                                        @class = "btn btn-outline-primary btn-block"
+                                    }
+                                )
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+
+                <div class="alert alert-info text-center">
+
+                    Không tìm thấy sự kiện phù hợp.
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+<style>
+
+    .filter-card {
+        border-radius: 12px;
+    }
+
+    .filter-title {
+        color: #005baa;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+        .filter-title i {
+            margin-right: 6px;
+        }
+
+    .filter-form label {
+        font-weight: 600;
+        color: #123456;
+        margin-bottom: 6px;
+    }
+
+    .filter-form .form-control {
+        border-radius: 6px;
+        border: 1px solid #ced4da;
+    }
+
+        .filter-form .form-control:focus {
+            border-color: #005baa;
+            box-shadow: 0 0 0 0.15rem rgba(0,91,170,0.15);
+        }
+</style>

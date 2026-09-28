@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow-sm">
+
+                <div class="card-header text-center">
+                    <h3 class="mb-1" style="color:#005baa;">
+                        Đăng ký tài khoản
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        Tạo tài khoản sinh viên TDMU Event
+                    </p>
+                </div>
+
+                <div class="card-body">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    @using (Html.BeginForm(
+                        "Register",
+                        "Account",
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <h5 class="mb-3" style="color:#005baa;">
+                            Thông tin tài khoản
+                        </h5>
+
+                        <div class="form-group">
+                            <label>Tên đăng nhập <span class="text-danger">*</span></label>
+
+                            <input type="text"
+                                   name="username"
+                                   class="form-control"
+                                   placeholder="Nhập tên đăng nhập"
+                                   required />
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mật khẩu <span class="text-danger">*</span></label>
+
+                                    <input type="password"
+                                           name="password"
+                                           class="form-control"
+                                           placeholder="Nhập mật khẩu"
+                                           required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Xác nhận mật khẩu <span class="text-danger">*</span></label>
+
+                                    <input type="password"
+                                           name="confirmPassword"
+                                           class="form-control"
+                                           placeholder="Nhập lại mật khẩu"
+                                           required />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <hr />
+
+                        <h5 class="mb-3" style="color:#005baa;">
+                            Thông tin sinh viên
+                        </h5>
+
+                        <div class="form-group">
+                            <label>Họ và tên <span class="text-danger">*</span></label>
+
+                            <input type="text"
+                                   name="full_name"
+                                   class="form-control"
+                                   placeholder="Nguyễn Văn A"
+                                   required />
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label>Mã sinh viên <span class="text-danger">*</span></label>
+
+                                    <input type="text"
+                                           name="student_code"
+                                           class="form-control"
+                                           placeholder="VD: 2124802010001"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label>Số điện thoại</label>
+
+                                    <input type="text"
+                                           name="phone"
+                                           class="form-control"
+                                           placeholder="Nhập số điện thoại" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Email <span class="text-danger">*</span></label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   placeholder="example@email.com"
+                                   required />
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label>Lớp</label>
+
+                                    <input type="text"
+                                           name="class_name"
+                                           class="form-control"
+                                           placeholder="VD: D23CNTT01" />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label>Ngành</label>
+
+                                    <input type="text"
+                                           name="major"
+                                           class="form-control"
+                                           value="Công nghệ thông tin" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Khoa / Viện</label>
+
+                            <input type="text"
+                                   name="faculty"
+                                   class="form-control"
+                                   value="Viện Công nghệ thông tin" />
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block"
+                                style="padding:10px;">
+
+                            Đăng ký tài khoản
+
+                        </button>
+
+                    }
+
+                    <div class="text-center mt-3">
+
+                        Đã có tài khoản?
+
+                        @Html.ActionLink(
+                            "Đăng nhập",
+                            "Login",
+                            "Account",
+                            null,
+                            new { style = "color:#005baa;font-weight:600;" }
+                        )
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+

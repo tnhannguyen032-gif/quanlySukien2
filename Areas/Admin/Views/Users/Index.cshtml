@@ -1,0 +1,448 @@
+﻿@model IEnumerable<quanlySukien.Models.user>
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2 class="font-weight-bold text-primary mb-1">
+                Quản lý người dùng
+            </h2>
+
+            <p class="text-muted mb-0">
+                Quản lý tài khoản sinh viên và cán bộ trong hệ thống.
+            </p>
+        </div>
+
+        <div>
+            @Html.ActionLink(
+                "＋ Tạo tài khoản Staff",
+                "CreateStaff",
+                "Users",
+                new { area = "Admin" },
+                new
+                {
+                    @class = "btn btn-primary"
+                }
+            )
+        </div>
+
+    </div>
+
+
+    <!-- THỐNG KÊ -->
+    <div class="row mb-4">
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Tổng tài khoản
+                    </small>
+
+                    <h3 class="font-weight-bold mt-2 mb-0">
+                        @ViewBag.TotalUsers
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Sinh viên
+                    </small>
+
+                    <h3 class="font-weight-bold text-info mt-2 mb-0">
+                        @ViewBag.TotalStudents
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Cán bộ
+                    </small>
+
+                    <h3 class="font-weight-bold text-success mt-2 mb-0">
+                        @ViewBag.TotalStaff
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-3 mb-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Quản trị viên
+                    </small>
+
+                    <h3 class="font-weight-bold text-danger mt-2 mb-0">
+                        @ViewBag.TotalAdmins
+                    </h3>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- THÔNG BÁO -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- BỘ LỌC -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            @using (Html.BeginForm(
+                "Index",
+                "Users",
+                new { area = "Admin" },
+                FormMethod.Get))
+            {
+                <div class="row">
+
+                    <div class="col-md-5 mb-3">
+
+                        <label class="font-weight-bold">
+                            Tìm kiếm
+                        </label>
+
+                        <input type="text"
+                               name="keyword"
+                               value="@ViewBag.Keyword"
+                               class="form-control"
+                               placeholder="Tên đăng nhập, họ tên, email, số điện thoại..." />
+
+                    </div>
+
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="font-weight-bold">
+                            Vai trò
+                        </label>
+
+                        <select name="role"
+                                class="form-control">
+
+                            <option value="">
+                                -- Tất cả vai trò --
+                            </option>
+
+                            <option value="student"
+                                    @(ViewBag.Role == "student" ? "selected" : "")>
+                                Sinh viên
+                            </option>
+
+                            <option value="staff"
+                                    @(ViewBag.Role == "staff" ? "selected" : "")>
+                                Cán bộ
+                            </option>
+
+                            <option value="admin"
+                                    @(ViewBag.Role == "admin" ? "selected" : "")>
+                                Quản trị viên
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-3 mb-3">
+
+                        <label class="font-weight-bold">
+                            Đơn vị
+                        </label>
+
+                        @Html.DropDownList(
+                            "departmentId",
+                            ViewBag.DepartmentList as SelectList,
+                            "-- Tất cả đơn vị --",
+                            new
+                            {
+                                @class = "form-control"
+                            }
+                        )
+
+                    </div>
+
+
+                    <div class="col-md-1 mb-3 d-flex align-items-end">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+
+                            Tìm
+
+                        </button>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- DANH SÁCH -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="thead-light">
+
+                        <tr>
+
+                            <th style="width:60px;">
+                                #
+                            </th>
+
+                            <th>
+                                Tài khoản
+                            </th>
+
+                            <th>
+                                Họ và tên
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Số điện thoại
+                            </th>
+
+                            <th>
+                                Vai trò
+                            </th>
+
+                            <th>
+                                Đơn vị
+                            </th>
+
+                            <th>
+                                Trạng thái
+                            </th>
+
+                            <th>
+                                Ngày tạo
+                            </th>
+
+                            <th style="width:100px;">
+                                Thao tác
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            int stt = 1;
+
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @stt
+                                    </td>
+
+                                    <td>
+
+                                        <strong>
+                                            @item.username
+                                        </strong>
+
+                                    </td>
+
+                                    <td>
+                                        @item.full_name
+                                    </td>
+
+                                    <td>
+                                        @item.email
+                                    </td>
+
+                                    <td>
+                                        @(string.IsNullOrWhiteSpace(item.phone)
+                                            ? "-"
+                                            : item.phone)
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (item.role == "admin")
+                                        {
+                                            <span class="badge badge-danger">
+                                                Quản trị viên
+                                            </span>
+                                        }
+                                        else if (item.role == "staff")
+                                        {
+                                            <span class="badge badge-success">
+                                                Cán bộ
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-info">
+                                                Sinh viên
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (item.department != null)
+                                        {
+                                            @item.department.name
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Chưa phân công
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (item.status == "active")
+                                        {
+                                            <span class="badge badge-success">
+                                                Hoạt động
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">
+                                                @item.status
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td>
+                                        @item.created_at.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (item.role != "admin")
+                                        {
+                                            @Html.ActionLink(
+                                                "Sửa",
+                                                "Edit",
+                                                "Users",
+                                                new
+                                                {
+                                                    area = "Admin",
+                                                    id = item.id
+                                                },
+                                                new
+                                                {
+                                                    @class = "btn btn-sm btn-outline-primary"
+                                                }
+                                            )
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                -
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+
+                                stt++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="10"
+                                    class="text-center py-5">
+
+                                    <h5 class="text-muted">
+                                        Không tìm thấy tài khoản nào.
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Hãy thử thay đổi từ khóa hoặc bộ lọc.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

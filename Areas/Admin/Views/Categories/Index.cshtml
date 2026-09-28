@@ -1,0 +1,357 @@
+﻿@model IEnumerable<quanlySukien.Models.event_categories>
+
+@{
+    ViewBag.Title = "Quản lý danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="font-weight-bold text-primary mb-1">
+                Quản lý danh mục
+            </h2>
+
+            <p class="text-muted mb-0">
+                Quản lý các loại sự kiện được sử dụng trong hệ thống.
+            </p>
+
+        </div>
+
+        <div>
+
+            @Html.ActionLink(
+                "＋ Thêm loại sự kiện",
+                "Create",
+                "Categories",
+                new { area = "Admin" },
+                new
+                {
+                    @class = "btn btn-primary"
+                }
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- THỐNG KÊ -->
+    <div class="row mb-4">
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Tổng loại sự kiện
+                    </small>
+
+                    <h3 class="font-weight-bold text-primary mt-2 mb-0">
+                        @ViewBag.TotalCategories
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Đang hoạt động
+                    </small>
+
+                    <h3 class="font-weight-bold text-success mt-2 mb-0">
+                        @ViewBag.ActiveCategories
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body">
+
+                    <small class="text-muted">
+                        Đang ẩn
+                    </small>
+
+                    <h3 class="font-weight-bold text-secondary mt-2 mb-0">
+                        @ViewBag.InactiveCategories
+                    </h3>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- THÔNG BÁO -->
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- TÌM KIẾM -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-body">
+
+            @using (Html.BeginForm(
+                "Index",
+                "Categories",
+                new { area = "Admin" },
+                FormMethod.Get))
+            {
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <label class="font-weight-bold">
+                            Tìm kiếm loại sự kiện
+                        </label>
+
+                        <input type="text"
+                               name="keyword"
+                               value="@ViewBag.Keyword"
+                               class="form-control"
+                               placeholder="Nhập tên loại sự kiện..." />
+
+                    </div>
+
+
+                    <div class="col-md-2 d-flex align-items-end">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+
+                            Tìm kiếm
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- DANH SÁCH -->
+    <div class="card shadow-sm border-0">
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead class="thead-light">
+
+                        <tr>
+
+                            <th style="width:80px;">
+                                STT
+                            </th>
+
+                            <th style="width:80px;">
+                                ID
+                            </th>
+
+                            <th>
+                                Tên loại sự kiện
+                            </th>
+
+                            <th style="width:140px;">
+                                Trạng thái
+                            </th>
+
+                            <th style="width:220px;">
+                                Thao tác
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @if (Model != null && Model.Any())
+                        {
+                            int stt = 1;
+
+                            foreach (var item in Model)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @stt
+                                    </td>
+
+
+                                    <td>
+                                        @item.id
+                                    </td>
+
+
+                                    <td>
+
+                                        <strong class="text-primary">
+                                            @item.name
+                                        </strong>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        @if (item.status == "active")
+                                        {
+                                            <span class="badge badge-success">
+                                                Đang hoạt động
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-secondary">
+                                                Đang ẩn
+                                            </span>
+                                        }
+
+                                    </td>
+
+
+                                    <td style="white-space:nowrap;">
+
+                                        @Html.ActionLink(
+                                            "Sửa",
+                                            "Edit",
+                                            "Categories",
+                                            new
+                                            {
+                                                area = "Admin",
+                                                id = item.id
+                                            },
+                                            new
+                                            {
+                                                @class =
+                                                    "btn btn-sm btn-outline-primary"
+                                            }
+                                        )
+
+
+                                        @using (Html.BeginForm(
+                                            "ToggleStatus",
+                                            "Categories",
+                                            new
+                                            {
+                                                area = "Admin"
+                                            },
+                                            FormMethod.Post,
+                                            new
+                                            {
+                                                style = "display:inline;"
+                                            }))
+                                        {
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="id"
+                                                   value="@item.id" />
+
+                                            if (item.status == "active")
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-secondary ml-1"
+                                                        onclick="return confirm('Bạn có chắc muốn ẩn loại sự kiện này?');">
+
+                                                    Ẩn
+
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-success ml-1">
+
+                                                    Hiện
+
+                                                </button>
+                                            }
+                                        }
+
+                                    </td>
+
+                                </tr>
+
+                                stt++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="5"
+                                    class="text-center py-5">
+
+                                    <h5 class="text-muted">
+                                        Không có loại sự kiện nào.
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+                                        Hãy thêm loại sự kiện mới.
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

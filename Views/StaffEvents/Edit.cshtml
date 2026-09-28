@@ -1,0 +1,300 @@
+﻿@model quanlySukien.Models.@event
+
+@{
+    ViewBag.Title = "Chỉnh sửa sự kiện";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h2 style="color:#005baa; font-weight:700;">
+                        Chỉnh sửa sự kiện
+                    </h2>
+
+                    <p class="text-muted">
+                        Cập nhật thông tin sự kiện của bạn.
+                    </p>
+
+                    <hr />
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+
+                    @using (Html.BeginForm(
+                        "Edit",
+                        "StaffEvents",
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="id"
+                               value="@Model.id" />
+
+
+                        <!-- TÊN -->
+                        <div class="form-group">
+
+                            <label>
+                                Tên sự kiện
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   name="title"
+                                   class="form-control"
+                                   value="@(ViewBag.TitleValue ?? Model.title)"
+                                   required />
+
+                        </div>
+
+
+                        <!-- MÔ TẢ -->
+                        <div class="form-group">
+
+                            <label>Mô tả</label>
+
+                            <textarea name="description"
+                                      class="form-control"
+                                      rows="5">"@(ViewBag.DescriptionValue ?? Model.description)"</textarea>
+
+                        </div>
+
+
+                        <!-- LOẠI -->
+                        <div class="form-group">
+
+                            <label>
+                                Loại sự kiện
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            @Html.DropDownList(
+                                "category_id",
+                                ViewBag.CategoryList as SelectList,
+                                "-- Chọn loại sự kiện --",
+                                new
+                                {
+                                    @class = "form-control",
+                                    required = "required"
+                                }
+                            )
+
+                        </div>
+
+
+                        <!-- ĐỊA ĐIỂM -->
+                        <div class="form-group">
+
+                            <label>
+                                Địa điểm
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   name="location"
+                                   class="form-control"
+                                   value="@(ViewBag.LocationValue ?? Model.location)"
+                                   required />
+
+                        </div>
+
+
+                        <!-- BẮT ĐẦU -->
+                        <h5 style="color:#005baa;">
+                            Thời gian bắt đầu
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-7">
+
+                                <div class="form-group">
+
+                                    <label>Ngày</label>
+
+                                    <input type="date"
+                                           name="start_date"
+                                           class="form-control"
+                                           value="@ViewBag.StartDateValue"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-5">
+
+                                <div class="form-group">
+
+                                    <label>Giờ (24h)</label>
+
+                                    <input type="text"
+                                           name="start_time"
+                                           class="form-control"
+                                           placeholder="HH:mm"
+                                           maxlength="5"
+                                           value="@ViewBag.StartTimeValue"
+                                           pattern="([01][0-9]|2[0-3]):[0-5][0-9]"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- KẾT THÚC -->
+                        <h5 style="color:#005baa;">
+                            Thời gian kết thúc
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-7">
+
+                                <div class="form-group">
+
+                                    <label>Ngày</label>
+
+                                    <input type="date"
+                                           name="end_date"
+                                           class="form-control"
+                                           value="@ViewBag.EndDateValue"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-5">
+
+                                <div class="form-group">
+
+                                    <label>Giờ (24h)</label>
+
+                                    <input type="text"
+                                           name="end_time"
+                                           class="form-control"
+                                           placeholder="HH:mm"
+                                           maxlength="5"
+                                           value="@ViewBag.EndTimeValue"
+                                           pattern="([01][0-9]|2[0-3]):[0-5][0-9]"
+                                           required />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- HẠN ĐĂNG KÝ -->
+                        <h5 style="color:#005baa;">
+                            Hạn đăng ký
+                        </h5>
+
+                        <div class="row">
+
+                            <div class="col-md-7">
+
+                                <div class="form-group">
+
+                                    <label>Ngày</label>
+
+                                    <input type="date"
+                                           name="registration_date"
+                                           class="form-control"
+                                           value="@ViewBag.RegistrationDateValue" />
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-5">
+
+                                <div class="form-group">
+
+                                    <label>Giờ (24h)</label>
+
+                                    <input type="text"
+                                           name="registration_time"
+                                           class="form-control"
+                                           placeholder="HH:mm"
+                                           maxlength="5"
+                                           value="@ViewBag.RegistrationTimeValue"
+                                           pattern="([01][0-9]|2[0-3]):[0-5][0-9]" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <small class="text-muted">
+                            Hạn đăng ký phải trước hoặc bằng thời gian bắt đầu.
+                        </small>
+
+
+                        <!-- SỐ LƯỢNG -->
+                        <div class="form-group mt-3">
+
+                            <label>
+                                Số lượng người tham gia tối đa
+                            </label>
+
+                            <input type="number"
+                                   name="max_participants"
+                                   class="form-control"
+                                   min="1"
+                                   value="@ViewBag.MaxParticipantsValue" />
+
+                        </div>
+
+
+                        <hr />
+
+
+                        <button type="submit"
+                                class="btn btn-primary">
+
+                            Lưu thay đổi
+
+                        </button>
+
+                        @Html.ActionLink(
+                            "Hủy",
+                            "Index",
+                            "StaffEvents",
+                            null,
+                            new
+                            {
+                                @class = "btn btn-outline-secondary ml-2"
+                            }
+                        )
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

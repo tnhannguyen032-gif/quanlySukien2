@@ -1,0 +1,522 @@
+﻿
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewBag.Title - TDMU Event</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+<style>
+        /* =========================
+           TDMU EVENT - STYLE
+        ========================== */
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f5f8fc;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .main-header {
+            background-color: #ffffff;
+            border-bottom: 3px solid #005baa;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+            /* NAVBAR */
+            .main-header .navbar {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                background-color: #ffffff;
+            }
+
+        /* LOGO */
+        .tdmu-brand {
+            font-size: 24px;
+            font-weight: 800;
+            color: #005baa !important;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+            .tdmu-brand:hover {
+                color: #00498f !important;
+                text-decoration: none;
+            }
+
+        /* MENU */
+        .main-header .nav-link {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333 !important;
+            padding: 10px 15px !important;
+            transition: all 0.2s ease;
+        }
+
+            .main-header .nav-link:hover {
+                color: #005baa !important;
+            }
+
+        /* ĐĂNG NHẬP */
+        .login-link {
+            margin-right: 8px;
+        }
+
+        /* NÚT ĐĂNG KÝ */
+        .btn-register {
+            display: inline-block;
+            margin-top: 3px;
+            padding: 8px 18px !important;
+            border-radius: 6px;
+            color: #ffffff !important;
+            background-color: #005baa;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+            .btn-register:hover {
+                background-color: #00498f;
+                color: #ffffff !important;
+                text-decoration: none;
+                box-shadow: 0 4px 10px rgba(0,91,170,0.25);
+            }
+
+        /* USER */
+        .user-welcome .nav-link {
+            color: #005baa !important;
+        }
+
+        .user-welcome strong {
+            font-weight: 700;
+        }
+
+        /* ĐĂNG XUẤT */
+        .logout-link {
+            color: #555 !important;
+        }
+
+            .logout-link:hover {
+                color: #005baa !important;
+            }
+
+        /* MAIN */
+        .main-content {
+            min-height: calc(100vh - 250px);
+            padding: 35px 0 50px;
+        }
+
+        /* BUTTON */
+        .btn-primary {
+            background-color: #005baa;
+            border-color: #005baa;
+        }
+
+            .btn-primary:hover,
+            .btn-primary:focus,
+            .btn-primary:active {
+                background-color: #00498f !important;
+                border-color: #00498f !important;
+            }
+
+        /* CARD */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background-color: #ffffff;
+            border-bottom: 2px solid #e8eef5;
+        }
+
+        /* FORM */
+        .form-control {
+            border: 1px solid #d5dfe9;
+            border-radius: 6px;
+            min-height: 42px;
+        }
+
+            .form-control:focus {
+                border-color: #005baa;
+                box-shadow: 0 0 0 0.15rem rgba(0,91,170,0.15);
+            }
+
+        /* FOOTER */
+        .main-footer {
+            background-color: #005baa;
+            color: #ffffff;
+            padding: 40px 0 20px;
+            margin-top: 30px;
+        }
+
+            .main-footer h5 {
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+
+            .main-footer h6 {
+                font-weight: 700;
+                margin-bottom: 15px;
+            }
+
+            .main-footer p {
+                color: rgba(255,255,255,0.9);
+                line-height: 1.7;
+                margin-bottom: 8px;
+            }
+
+            .main-footer a {
+                color: #ffffff;
+                text-decoration: none;
+            }
+
+                .main-footer a:hover {
+                    color: #dceeff;
+                    text-decoration: none;
+                }
+
+            .main-footer hr {
+                border-top: 1px solid rgba(255,255,255,0.25);
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+
+        /* FOOTER BOTTOM */
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+     @@media (max-width: 991px) {
+
+        .main-header .nav-link {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        .btn-register {
+            display: inline-block;
+            margin-left: 5px;
+            margin-bottom: 8px;
+        }
+
+        .footer-bottom {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+    }
+</style>
+</head>
+<body>
+
+    <!-- =========================
+         HEADER / NAVBAR
+    ========================== -->
+    <header class="main-header">
+
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+            <div class="container">
+
+                <!-- LOGO / TÊN HỆ THỐNG -->
+                @Html.ActionLink(
+                    "TDMU EVENT",
+                    "Index",
+                    "Home",
+                    null,
+                    new { @class = "navbar-brand tdmu-brand" }
+                )
+
+                <!-- MOBILE MENU -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+
+                    <span class="navbar-toggler-icon"></span>
+
+                </button>
+
+
+                <!-- MENU -->
+                <div class="collapse navbar-collapse"
+                     id="mainNavbar">
+
+                    <ul class="navbar-nav mr-auto">
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Trang chủ",
+                                "Index",
+                                "Home",
+                                null,
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        <li class="nav-item">
+                            @Html.ActionLink(
+                                "Sự kiện",
+                                "Index",
+                                "Events",
+                                null,
+                                new { @class = "nav-link" }
+                            )
+                        </li>
+
+                        @if (Session["Role"] != null &&
+                            Session["Role"].ToString() == "student")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink(
+                                    "Sự kiện của tôi",
+                                    "MyEvents",
+                                    "Registrations",
+                                    null,
+                                    new { @class = "nav-link" }
+                                )
+                            </li>
+                        }
+
+                        @if (Session["Role"] != null &&
+                            Session["Role"].ToString() == "staff")
+                        {
+                            <li class="nav-item">
+                                @Html.ActionLink(
+                                    "Quản lý sự kiện",
+                                    "Index",
+                                    "StaffEvents",
+                                    null,
+                                    new { @class = "nav-link" }
+                                )
+                            </li>
+                        }
+
+                    </ul>
+
+
+                    <!-- TÀI KHOẢN -->
+                    <ul class="navbar-nav account-menu">
+
+                        @if (Session["UserId"] == null)
+                        {
+                            <li class="nav-item">
+
+                                @Html.ActionLink(
+                                    "Đăng nhập",
+                                    "Login",
+                                    "Account",
+                                    null,
+                                    new { @class = "nav-link login-link" }
+                                )
+
+                            </li>
+
+                            <li class="nav-item">
+
+                                @Html.ActionLink(
+                                    "Đăng ký",
+                                    "Register",
+                                    "Account",
+                                    null,
+                                    new { @class = "btn btn-register" }
+                                )
+
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item user-welcome">
+
+                                <span class="nav-link">
+                                    Xin chào,
+                                    <strong>
+                                        @Session["FullName"]
+                                    </strong>
+                                </span>
+
+                            </li>
+
+                            <li class="nav-item">
+
+                                @Html.ActionLink(
+                                    "Đăng xuất",
+                                    "Logout",
+                                    "Account",
+                                    null,
+                                    new { @class = "nav-link logout-link" }
+                                )
+
+                            </li>
+                        }
+
+                    </ul>
+
+                    @if (Session["UserId"] != null &&
+                        Session["Role"] != null &&
+                        Session["Role"].ToString() == "student")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="@Url.Action("Index", "Notifications")">
+
+                                <i class="fa fa-bell"></i>
+                                Thông báo
+
+                            </a>
+                        </li>
+                    }
+
+                    @if (Session["Role"] != null &&
+Session["Role"].ToString() == "admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="@Url.Action(
+               "Index",
+               "Dashboard",
+               new { area = "Admin" })">
+
+                                <i class="fa fa-cogs"></i>
+                                Quản trị
+
+                            </a>
+                        </li>
+                    }
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+    <main class="main-content">
+
+        @RenderBody()
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="main-footer">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <h5>TDMU EVENT</h5>
+
+                    <p>
+                        Hệ thống quản lý và đăng ký sự kiện
+                        dành cho sinh viên Trường Đại học
+                        Thủ Dầu Một.
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <h6>Liên kết</h6>
+
+                    <p>
+                        @Html.ActionLink(
+                            "Trang chủ",
+                            "Index",
+                            "Home"
+                        )
+                    </p>
+
+                    <p>
+                        @Html.ActionLink(
+                            "Sự kiện",
+                            "Index",
+                            "Events"
+                        )
+                    </p>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <h6>Hỗ trợ</h6>
+
+                    <p>
+                        Thông tin sự kiện
+                    </p>
+
+                    <p>
+                        Hỗ trợ người học
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <hr />
+
+
+            <div class="footer-bottom">
+
+                <span>
+                    © @DateTime.Now.Year TDMU EVENT
+                </span>
+
+                <span>
+                    Trường Đại học Thủ Dầu Một
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,248 @@
+﻿@model quanlySukien.Models.user
+
+@{
+    ViewBag.Title = "Sửa người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+                        Chỉnh sửa người dùng
+                    </h4>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+
+                    <!-- THÔNG TIN TÀI KHOẢN -->
+                    <div class="alert alert-light border">
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <strong>
+                                    Tên đăng nhập:
+                                </strong>
+
+                                @Model.username
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <strong>
+                                    Vai trò:
+                                </strong>
+
+                                @ViewBag.RoleName
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    @using (Html.BeginForm(
+                        "Edit",
+                        "Users",
+                        new { area = "Admin", id = Model.id },
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        <!-- HỌ TÊN -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Họ và tên
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   name="full_name"
+                                   class="form-control"
+                                   value="@(
+                                       ViewBag.FullNameValue
+                                       ?? Model.full_name
+                                   )"
+                                   required />
+
+                        </div>
+
+
+                        <!-- EMAIL -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Email
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="email"
+                                   name="email"
+                                   class="form-control"
+                                   value="@(
+                                       ViewBag.EmailValue
+                                       ?? Model.email
+                                   )"
+                                   required />
+
+                        </div>
+
+
+                        <!-- PHONE -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Số điện thoại
+                            </label>
+
+                            <input type="text"
+                                   name="phone"
+                                   class="form-control"
+                                   value="@(
+                                       ViewBag.PhoneValue
+                                       ?? Model.phone
+                                   )" />
+
+                        </div>
+
+
+                        <!-- ĐƠN VỊ -->
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Đơn vị
+                            </label>
+
+                            @Html.DropDownList(
+                                "department_id",
+                                ViewBag.DepartmentList as SelectList,
+                                "-- Chưa phân công --",
+                                new
+                                {
+                                    @class = "form-control"
+                                }
+                            )
+
+                            @if (Model.role == "staff")
+                            {
+                                <small class="form-text text-muted">
+                                    Tài khoản Staff bắt buộc phải thuộc một đơn vị.
+                                </small>
+                            }
+
+                        </div>
+
+
+                        <hr class="my-4" />
+
+
+                        <!-- ĐỔI MẬT KHẨU -->
+                        <h5 class="text-primary font-weight-bold">
+                            Đổi mật khẩu
+                        </h5>
+
+                        <p class="text-muted">
+                            Không cần nhập nếu không muốn thay đổi mật khẩu.
+                        </p>
+
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Mật khẩu mới
+                                    </label>
+
+                                    <input type="password"
+                                           name="newPassword"
+                                           class="form-control"
+                                           placeholder="Ít nhất 6 ký tự" />
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Xác nhận mật khẩu mới
+                                    </label>
+
+                                    <input type="password"
+                                           name="confirmPassword"
+                                           class="form-control" />
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <hr class="mt-4" />
+
+
+                        <div class="d-flex justify-content-between">
+
+                            @Html.ActionLink(
+                                "← Quay lại",
+                                "Index",
+                                "Users",
+                                new { area = "Admin" },
+                                new
+                                {
+                                    @class = "btn btn-outline-secondary"
+                                }
+                            )
+
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                Lưu thay đổi
+
+                            </button>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

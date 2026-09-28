@@ -1,0 +1,137 @@
+﻿@model quanlySukien.Models.@event
+
+@{
+    ViewBag.Title = "Xóa sự kiện";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h2 style="color:#dc3545; font-weight:700;">
+                        Xóa sự kiện
+                    </h2>
+
+                    <hr />
+
+                    @if (ViewBag.RegistrationCount > 0)
+                    {
+                        <div class="alert alert-danger">
+
+                            <strong>Không thể xóa sự kiện này.</strong>
+
+                            <br />
+
+                            Sự kiện đã có
+                            <strong>
+                                @ViewBag.RegistrationCount
+                            </strong>
+                            lượt đăng ký.
+
+                        </div>
+
+                        <div class="mt-3">
+
+                            @Html.ActionLink(
+                                "Quay lại",
+                                "Index",
+                                "StaffEvents",
+                                null,
+                                new
+                                {
+                                    @class = "btn btn-outline-secondary"
+                                }
+                            )
+
+                        </div>
+
+                        @Html.ActionLink(
+    "Điểm danh",
+    "Index",
+    "StaffAttendance",
+    new { eventId = Model.id },
+    new
+    {
+        @class = "btn btn-info mr-2"
+    }
+)
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning">
+
+                            Bạn có chắc chắn muốn xóa sự kiện này?
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <h4 style="color:#005baa;">
+                                @Model.title
+                            </h4>
+
+                            <p>
+                                <strong>Địa điểm:</strong>
+                                @Model.location
+                            </p>
+
+                            <p>
+                                <strong>Thời gian:</strong>
+                                @Model.start_time.ToString("dd/MM/yyyy HH:mm")
+                                -
+                                @Model.end_time.ToString("dd/MM/yyyy HH:mm")
+                            </p>
+
+                            <p>
+                                <strong>Trạng thái:</strong>
+                                @Model.status
+                            </p>
+
+                        </div>
+
+                        using (Html.BeginForm(
+                            "Delete",
+                            "StaffEvents",
+                            FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <input type="hidden"
+                                   name="id"
+                                   value="@Model.id" />
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+
+                                Xác nhận xóa
+
+                            </button>
+
+                            @Html.ActionLink(
+                                "Hủy",
+                                "Index",
+                                "StaffEvents",
+                                null,
+                                new
+                                {
+                                    @class = "btn btn-outline-secondary ml-2"
+                                }
+                            )
+                        }
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

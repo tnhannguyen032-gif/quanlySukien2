@@ -1,0 +1,521 @@
+﻿@model quanlySukien.Models.@event
+
+@{
+    ViewBag.Title = "Chi tiết sự kiện";
+
+    var feedbackList = ViewBag.FeedbackList;
+
+    double averageRating = ViewBag.AverageRating != null
+        ? Convert.ToDouble(ViewBag.AverageRating)
+        : 0;
+
+    int feedbackCount = ViewBag.FeedbackCount != null
+        ? Convert.ToInt32(ViewBag.FeedbackCount)
+        : 0;
+}
+
+<div class="container">
+
+    <!-- =========================
+         THÔNG BÁO
+    ========================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- =========================
+         THÔNG TIN SỰ KIỆN
+    ========================== -->
+
+    <div class="row">
+
+        <!-- =========================
+             NỘI DUNG CHÍNH
+        ========================== -->
+
+        <div class="col-lg-8">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h2 style="color:#005baa; font-weight:700;">
+                        @Model.title
+                    </h2>
+
+                    <hr />
+
+                    <h5 style="color:#005baa;">
+                        Nội dung sự kiện
+                    </h5>
+
+                    <p style="line-height:1.8; white-space:pre-line;">
+                        @Model.description
+                    </p>
+
+
+                    <!-- THÔNG TIN -->
+
+                    <h5 style="color:#005baa; margin-top:30px;">
+                        Thông tin sự kiện
+                    </h5>
+
+                    <div class="row mt-3">
+
+                        <!-- ĐỊA ĐIỂM -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>Địa điểm</strong>
+
+                            <div>
+                                @Model.location
+                            </div>
+
+                        </div>
+
+
+                        <!-- THỜI GIAN BẮT ĐẦU -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>Thời gian bắt đầu</strong>
+
+                            <div>
+                                @Model.start_time.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+
+                        </div>
+
+
+                        <!-- THỜI GIAN KẾT THÚC -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>Thời gian kết thúc</strong>
+
+                            <div>
+                                @Model.end_time.ToString("dd/MM/yyyy HH:mm")
+                            </div>
+
+                        </div>
+
+
+                        <!-- HẠN ĐĂNG KÝ -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>Hạn đăng ký</strong>
+
+                            <div>
+
+                                @if (Model.registration_deadline.HasValue)
+                                {
+                                    @Model.registration_deadline.Value.ToString("dd/MM/yyyy HH:mm")
+                                }
+                                else
+                                {
+                                    <span>Không giới hạn</span>
+                                }
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- SỐ LƯỢNG TỐI ĐA -->
+
+                        <div class="col-md-6 mb-3">
+
+                            <strong>Số lượng tối đa</strong>
+
+                            <div>
+
+                                @if (Model.max_participants.HasValue)
+                                {
+                                    @Model.max_participants
+                                }
+                                else
+                                {
+                                    <span>Không giới hạn</span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NÚT QUAY LẠI -->
+
+                    <div class="mt-4">
+
+                        @Html.ActionLink(
+                            "← Quay lại danh sách",
+                            "Index",
+                            "Events",
+                            null,
+                            new
+                            {
+                                @class = "btn btn-outline-secondary"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             CỘT ĐĂNG KÝ
+        ========================== -->
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 style="color:#005baa; font-weight:700;">
+                        Tham gia sự kiện
+                    </h5>
+
+
+                    <!-- SỐ LƯỢNG -->
+
+                    <p class="mb-2">
+
+                        <strong>Số lượng đã duyệt:</strong>
+
+                        @ViewBag.ApprovedCount
+                        /
+                        @(Model.max_participants.HasValue
+                            ? Model.max_participants.ToString()
+                            : "Không giới hạn")
+
+                    </p>
+
+
+                    @if (ViewBag.PendingCount > 0)
+                    {
+                        <p class="text-muted">
+
+                            Có @ViewBag.PendingCount
+                            đăng ký đang chờ duyệt.
+
+                        </p>
+                    }
+
+
+                    <hr />
+
+
+                    <!-- TRẠNG THÁI ĐĂNG KÝ -->
+
+                    @if (Session["UserId"] == null)
+                    {
+                        @Html.ActionLink(
+                            "Đăng nhập để đăng ký",
+                            "Login",
+                            "Account",
+                            null,
+                            new
+                            {
+                                @class = "btn btn-primary btn-block"
+                            }
+                        )
+                    }
+                    else
+                    {
+                        if (ViewBag.RegistrationStatus == null)
+                        {
+                            if (Model.max_participants.HasValue &&
+                                ViewBag.ApprovedCount >= Model.max_participants)
+                            {
+                                <div class="alert alert-danger text-center">
+
+                                    Sự kiện đã đủ số lượng
+                                    người tham gia.
+
+                                </div>
+                            }
+                            else
+                            {
+                                @Html.ActionLink(
+                                    "Đăng ký tham gia",
+                                    "Create",
+                                    "Registrations",
+                                    new { eventId = Model.id },
+                                    new
+                                    {
+                                        @class = "btn btn-primary btn-block"
+                                    }
+                                )
+                            }
+                        }
+                        else if (ViewBag.RegistrationStatus == "pending")
+                        {
+                            <div class="alert alert-warning text-center">
+
+                                Bạn đã đăng ký sự kiện này.
+                                <br />
+
+                                <strong>
+                                    Đang chờ kiểm duyệt.
+                                </strong>
+
+                            </div>
+                        }
+                        else if (ViewBag.RegistrationStatus == "approved")
+                        {
+                            <div class="alert alert-success text-center">
+
+                                Bạn đã được duyệt tham gia
+                                sự kiện này.
+
+                            </div>
+                        }
+                        else if (ViewBag.RegistrationStatus == "rejected")
+                        {
+                            <div class="alert alert-danger text-center">
+
+                                Đăng ký của bạn đã bị từ chối.
+
+                            </div>
+                        }
+                        else if (ViewBag.RegistrationStatus == "cancelled")
+                        {
+                            @Html.ActionLink(
+                                "Đăng ký lại",
+                                "Create",
+                                "Registrations",
+                                new { eventId = Model.id },
+                                new
+                                {
+                                    @class = "btn btn-primary btn-block"
+                                }
+                            )
+                        }
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================================================
+         ĐÁNH GIÁ SỰ KIỆN
+    =================================================== -->
+
+    <div class="card shadow-sm border-0 mt-4 mb-5">
+
+        <div class="card-body p-4">
+
+            <h3 style="color:#005baa; font-weight:700;">
+
+                <i class="fa fa-star"></i>
+                Đánh giá sự kiện
+
+            </h3>
+
+            <hr />
+
+
+            @if (feedbackCount > 0)
+            {
+                <!-- =========================
+                     ĐIỂM TRUNG BÌNH
+                ========================== -->
+
+                <div class="text-center mb-4">
+
+                    <div style="
+                        font-size:42px;
+                        font-weight:700;
+                        color:#005baa;">
+
+                        @averageRating.ToString("0.0") / 5
+
+                    </div>
+
+
+                    <!-- HIỂN THỊ SAO -->
+
+                    <div style="
+                        font-size:30px;
+                        color:#f5b301;">
+
+                        @{
+                            int roundedRating =
+                                (int)Math.Round(averageRating);
+                        }
+
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= roundedRating)
+                            {
+                                <span>★</span>
+                            }
+                            else
+                            {
+                                <span style="color:#d9d9d9;">
+                                    ★
+                                </span>
+                            }
+                        }
+
+                    </div>
+
+
+                    <div class="text-muted">
+
+                        Dựa trên
+                        <strong>
+                            @feedbackCount
+                        </strong>
+                        đánh giá
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     DANH SÁCH NHẬN XÉT
+                ========================== -->
+
+                <h5 style="
+                    color:#005baa;
+                    font-weight:700;
+                    margin-bottom:20px;">
+
+                    Nhận xét của người tham gia
+
+                </h5>
+
+
+                foreach (var feedback in feedbackList)
+                {
+                    <div class="border rounded p-3 mb-3">
+
+                        <!-- TÊN + NGÀY -->
+
+                        <div class="d-flex justify-content-between">
+
+                            <strong>
+                                Người tham gia
+                            </strong>
+
+                            <span class="text-muted">
+
+                                @Convert.ToDateTime(
+                                    feedback.created_at
+                                ).ToString("dd/MM/yyyy HH:mm")
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- SAO -->
+
+                        <div style="
+                            color:#f5b301;
+                            font-size:21px;
+                            margin-top:5px;">
+
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= feedback.rating)
+                                {
+                                    <span>★</span>
+                                }
+                                else
+                                {
+                                    <span style="color:#d9d9d9;">
+                                        ★
+                                    </span>
+                                }
+                            }
+
+                        </div>
+
+
+                        <!-- NHẬN XÉT -->
+
+                        @if (!string.IsNullOrWhiteSpace(
+                            Convert.ToString(feedback.comment)))
+                        {
+                            <p class="mb-0 mt-2"
+                               style="
+                               line-height:1.7;
+                               white-space:pre-line;">
+
+                                @feedback.comment
+
+                            </p>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0 mt-2">
+                                Người tham gia không để lại nhận xét.
+                            </p>
+                        }
+
+                    </div>
+                }
+            }
+            else
+            {
+                <!-- =========================
+                     CHƯA CÓ ĐÁNH GIÁ
+                ========================== -->
+
+                <div class="alert alert-light text-center">
+
+                    <i class="fa fa-star-o"
+                       style="font-size:25px;">
+                    </i>
+
+                    <br />
+
+                    <strong>
+                        Chưa có đánh giá nào.
+                    </strong>
+
+                    <div class="text-muted mt-1">
+
+                        Hãy trở thành người đầu tiên
+                        đánh giá sự kiện này.
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

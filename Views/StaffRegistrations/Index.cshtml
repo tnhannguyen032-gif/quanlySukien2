@@ -1,0 +1,341 @@
+﻿@model IEnumerable<quanlySukien.Models.registration>
+
+@{
+    ViewBag.Title = "Quản lý đăng ký";
+
+    var eventList = ViewBag.Events
+        as IEnumerable<dynamic>;
+
+    var selectedEvent = ViewBag.SelectedEvent
+        as dynamic;
+}
+
+<div class="container">
+
+    <!-- TIÊU ĐỀ -->
+    <div class="mb-4">
+
+        <h2 style="color:#005baa; font-weight:700;">
+            Quản lý đăng ký
+        </h2>
+
+        <p class="text-muted">
+            Xem và xử lý danh sách sinh viên đăng ký sự kiện.
+        </p>
+
+    </div>
+
+
+    <!-- THÔNG BÁO -->
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Error
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
+
+    <!-- CHỌN SỰ KIỆN -->
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h5 style="color:#005baa;">
+                Chọn sự kiện
+            </h5>
+
+            <form method="get"
+                  action="@Url.Action("Index", "StaffRegistrations")">
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <select name="eventId"
+                                class="form-control">
+
+                            <option value="">
+                                -- Chọn sự kiện --
+                            </option>
+
+                            @if (eventList != null)
+                            {
+                                foreach (var eventItem in eventList)
+                                {
+                                    if (selectedEvent != null &&
+                                        selectedEvent.id == eventItem.id)
+                                    {
+                                        <option value="@eventItem.id"
+                                                selected>
+                                            @eventItem.title
+                                        </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@eventItem.id">
+                                            @eventItem.title
+                                        </option>
+                                    }
+                                }
+                            }
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-md-2">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+
+                            Xem
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- THÔNG TIN SỰ KIỆN -->
+    @if (selectedEvent != null)
+    {
+        <div class="card mb-4">
+
+            <div class="card-body">
+
+                <h4 style="color:#005baa; font-weight:700;">
+                    @selectedEvent.title
+                </h4>
+
+                <p class="mb-1">
+                    <strong>Địa điểm:</strong>
+                    @selectedEvent.location
+                </p>
+
+                <p class="mb-1">
+                    <strong>Thời gian:</strong>
+                    @selectedEvent.start_time.ToString("dd/MM/yyyy HH:mm")
+                    -
+                    @selectedEvent.end_time.ToString("dd/MM/yyyy HH:mm")
+                </p>
+
+                <p class="mb-0">
+                    <strong>Số người đăng ký:</strong>
+                    @Model.Count()
+                </p>
+
+            </div>
+
+        </div>
+    }
+
+
+    <!-- DANH SÁCH ĐĂNG KÝ -->
+    @if (selectedEvent != null)
+    {
+        if (Model != null && Model.Any())
+        {
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 style="color:#005baa; font-weight:700;">
+                        Danh sách sinh viên đăng ký
+                    </h5>
+
+                    <div class="table-responsive">
+
+                        <table class="table table-bordered table-hover">
+
+                            <thead style="background:#005baa; color:white;">
+
+                                <tr>
+                                    <th>Họ tên</th>
+                                    <th>Mã sinh viên</th>
+                                    <th>Email</th>
+                                    <th>Ngày đăng ký</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+
+                                        <!-- HỌ TÊN -->
+                                        <td>
+                                            @{
+                                                var user =
+                                                    item.user;
+                                            }
+
+                                            @if (user != null)
+                                            {
+                                                @user.full_name
+                                            }
+                                            else
+                                            {
+                                                <span>Không xác định</span>
+                                            }
+                                        </td>
+
+
+                                        <!-- MÃ SINH VIÊN -->
+                                        <td>
+                                            @if (user != null &&
+                                                user.student_profiles != null &&
+                                                user.student_profiles.Any())
+                                            {
+                                                var studentProfile =
+                                                    user.student_profiles.FirstOrDefault();
+
+                                                @studentProfile.student_code
+                                            }
+                                            else
+                                            {
+                                                <span>---</span>
+                                            }
+                                        </td>
+
+                                        <!-- EMAIL -->
+                                        <td>
+                                            @if (user != null)
+                                            {
+                                                @user.email
+                                            }
+                                        </td>
+
+
+                                        <!-- NGÀY ĐĂNG KÝ -->
+                                        <td>
+                                            @item.registered_at.ToString(
+                                                     "dd/MM/yyyy HH:mm")
+                                        </td>
+
+
+                                        <!-- TRẠNG THÁI -->
+                                        <td>
+
+                                            @if (item.status == "pending")
+                                            {
+                                                <span class="badge badge-warning">
+                                                    Chờ duyệt
+                                                </span>
+                                            }
+                                            else if (item.status == "approved")
+                                            {
+                                                <span class="badge badge-success">
+                                                    Đã duyệt
+                                                </span>
+                                            }
+                                            else if (item.status == "rejected")
+                                            {
+                                                <span class="badge badge-danger">
+                                                    Từ chối
+                                                </span>
+                                            }
+                                            else if (item.status == "cancelled")
+                                            {
+                                                <span class="badge badge-secondary">
+                                                    Đã hủy
+                                                </span>
+                                            }
+
+                                        </td>
+
+
+                                        <!-- THAO TÁC -->
+                                        <td>
+
+                                            @if (item.status == "pending")
+                                            {
+                                                using (Html.BeginForm(
+                                                    "Approve",
+                                                    "StaffRegistrations",
+                                                    FormMethod.Post,
+                                                    new
+                                                    {
+                                                        style = "display:inline;"
+                                                    }))
+                                                {
+                                                    @Html.AntiForgeryToken()
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@item.id" />
+
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-success">
+                                                        Duyệt
+                                                    </button>
+                                                }
+
+                                                @Html.ActionLink(
+                                                         "Từ chối",
+                                                         "Reject",
+                                                         "StaffRegistrations",
+                                                         new { id = item.id },
+                                                         new
+                                                         {
+                                                             @class = "btn btn-sm btn-danger ml-1"
+                                                         }
+                                                     )
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">
+                                                    Không có thao tác
+                                                </span>
+                                            }
+
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info text-center">
+
+                Chưa có sinh viên đăng ký sự kiện này.
+
+            </div>
+        }
+    }
+
+</div>

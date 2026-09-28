@@ -1,0 +1,110 @@
+﻿@model quanlySukien.Models.department
+
+@{
+    ViewBag.Title = "Sửa đơn vị";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+                        Chỉnh sửa đơn vị
+                    </h4>
+
+                </div>
+
+
+                <div class="card-body">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+
+                    <div class="alert alert-light border">
+
+                        <strong>
+                            ID đơn vị:
+                        </strong>
+
+                        @Model.id
+
+                    </div>
+
+
+                    @using (Html.BeginForm(
+                        "Edit",
+                        "Departments",
+                        new
+                        {
+                            area = "Admin",
+                            id = Model.id
+                        },
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        <div class="form-group">
+
+                            <label class="font-weight-bold">
+                                Tên đơn vị
+                                <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text"
+                                   name="name"
+                                   class="form-control"
+                                   value="@Model.name"
+                                   required />
+
+                        </div>
+
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between">
+
+                            @Html.ActionLink(
+                                "← Quay lại",
+                                "Index",
+                                "Departments",
+                                new { area = "Admin" },
+                                new
+                                {
+                                    @class =
+                                        "btn btn-outline-secondary"
+                                }
+                            )
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                Lưu thay đổi
+
+                            </button>
+
+                        </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

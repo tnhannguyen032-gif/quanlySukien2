@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4d8e964926874baf9e6c8da1e869eade" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="event_managementModel.attendance" Width="1.5" PointX="15.75" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.benefit" Width="1.5" PointX="6" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.department" Width="1.5" PointX="0.75" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.event_categories" Width="1.5" PointX="6" PointY="19.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.event_images" Width="1.5" PointX="10.5" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.event" Width="1.5" PointX="8.25" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.feedback" Width="1.5" PointX="10.5" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.notification" Width="1.5" PointX="5.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.registration" Width="1.5" PointX="13.5" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.student_profiles" Width="1.5" PointX="5.25" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="event_managementModel.user" Width="1.5" PointX="3" PointY="13.625" IsExpanded="true" />
+        <AssociationConnector Association="event_managementModel.FK_attendance_registrations" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_events_departments" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_users_departments" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_events_categories" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_event_images_events" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_events_created_by" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_feedbacks_events" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_registrations_events" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_feedbacks_users" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_notifications_users" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_registrations_approved_by" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_registrations_users" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.FK_student_profiles_users" ManuallyRouted="false" />
+        <AssociationConnector Association="event_managementModel.event_benefits" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

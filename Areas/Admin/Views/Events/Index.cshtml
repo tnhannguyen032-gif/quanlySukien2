@@ -1,0 +1,691 @@
+﻿@model IEnumerable<quanlySukien.Models.@event>
+
+@{
+    ViewBag.Title = "Quản lý sự kiện";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="admin-card">
+
+    <!-- ==========================================
+         TIÊU ĐỀ
+    =========================================== -->
+
+    <div class="page-header">
+
+        <div>
+            <h2>
+                <i class="fa fa-calendar"></i>
+                Quản lý sự kiện
+            </h2>
+
+            <p>
+                Quản lý, kiểm tra và phê duyệt các sự kiện trên hệ thống.
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         THÔNG BÁO
+    =========================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+
+            <i class="fa fa-check-circle"></i>
+
+            @TempData["Success"]
+
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+
+            <i class="fa fa-exclamation-circle"></i>
+
+            @TempData["Error"]
+
+        </div>
+    }
+
+
+    <!-- ==========================================
+         BỘ LỌC
+    =========================================== -->
+
+    <div class="event-filter">
+
+        @using (Html.BeginForm(
+            "Index",
+            "Events",
+            new { area = "Admin" },
+            FormMethod.Get))
+        {
+            <div class="row">
+
+                <!-- TÌM KIẾM -->
+
+                <div class="col-md-6 mb-3">
+
+                    <label>
+                        Tìm kiếm
+                    </label>
+
+                    <input type="text"
+                           name="searchString"
+                           value="@ViewBag.SearchString"
+                           class="form-control"
+                           placeholder="Tên sự kiện hoặc địa điểm..." />
+
+                </div>
+
+
+                <!-- TRẠNG THÁI -->
+
+                <div class="col-md-4 mb-3">
+
+                    <label>
+                        Trạng thái
+                    </label>
+
+                    <select name="statusFilter"
+                            class="form-control">
+
+                        <option value="">
+                            Tất cả
+                        </option>
+
+                        <option value="pending"
+                                @(ViewBag.StatusFilter == "pending" ? "selected" : "")>
+                            Chờ duyệt
+                        </option>
+
+                        <option value="approved"
+                                @(ViewBag.StatusFilter == "approved" ? "selected" : "")>
+                            Đã duyệt
+                        </option>
+
+                        <option value="rejected"
+                                @(ViewBag.StatusFilter == "rejected" ? "selected" : "")>
+                            Đã từ chối
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- NÚT LỌC -->
+
+                <div class="col-md-2 mb-3 filter-button">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        <i class="fa fa-search"></i>
+                        Lọc
+
+                    </button>
+
+                    <a href="@Url.Action(
+                        "Index",
+                        "Events",
+                        new { area = "Admin" })"
+                       class="btn btn-outline-secondary">
+
+                        <i class="fa fa-refresh"></i>
+
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- ==========================================
+         BẢNG SỰ KIỆN
+    =========================================== -->
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="empty-box">
+
+            <i class="fa fa-calendar-o"></i>
+
+            <h5>
+                Không tìm thấy sự kiện
+            </h5>
+
+            <p>
+                Không có sự kiện nào phù hợp với điều kiện tìm kiếm.
+            </p>
+
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover admin-events-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:5%;">
+                            ID
+                        </th>
+
+                        <th style="width:20%;">
+                            Sự kiện
+                        </th>
+
+                        <th style="width:13%;">
+                            Danh mục
+                        </th>
+
+                        <th style="width:13%;">
+                            Đơn vị
+                        </th>
+
+                        <th style="width:12%;">
+                            Người tạo
+                        </th>
+
+                        <th style="width:14%;">
+                            Thời gian
+                        </th>
+
+                        <th style="width:10%;">
+                            Trạng thái
+                        </th>
+
+                        <th style="width:13%;">
+                            Thao tác
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <!-- ID -->
+
+                            <td>
+                                @item.id
+                            </td>
+
+
+                            <!-- TÊN SỰ KIỆN -->
+
+                            <td>
+
+                                <strong class="event-title">
+                                    @item.title
+                                </strong>
+
+                                <div class="event-location">
+
+                                    <i class="fa fa-map-marker"></i>
+
+                                    @item.location
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- DANH MỤC -->
+
+                            <td>
+
+                                @if (item.event_categories != null)
+                                {
+                                    @item.event_categories.name
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Không xác định
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- ĐƠN VỊ -->
+
+                            <td>
+
+                                @if (item.department != null)
+                                {
+                                    @item.department.name
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Không xác định
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- NGƯỜI TẠO -->
+
+                            <td>
+
+                                @if (item.user != null)
+                                {
+                                    @item.user.full_name
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        Không xác định
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- THỜI GIAN -->
+
+                            <td>
+
+                                <div>
+                                    <strong>Bắt đầu:</strong>
+                                    <br />
+
+                                    @item.start_time.ToString("dd/MM/yyyy HH:mm")
+                                </div>
+
+                                <div class="mt-1">
+
+                                    <strong>Kết thúc:</strong>
+                                    <br />
+
+                                    @item.end_time.ToString("dd/MM/yyyy HH:mm")
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- TRẠNG THÁI -->
+
+                            <td>
+
+                                @if (item.status == "pending")
+                                {
+                                    <span class="status status-pending">
+
+                                        <i class="fa fa-clock-o"></i>
+                                        Chờ duyệt
+
+                                    </span>
+                                }
+                                else if (item.status == "approved")
+                                {
+                                    <span class="status status-approved">
+
+                                        <i class="fa fa-check"></i>
+                                        Đã duyệt
+
+                                    </span>
+                                }
+                                else if (item.status == "rejected")
+                                {
+                                    <span class="status status-rejected">
+
+                                        <i class="fa fa-times"></i>
+                                        Đã từ chối
+
+                                    </span>
+
+                                    if (!string.IsNullOrWhiteSpace(item.rejection_reason))
+                                    {
+                                        <div class="rejection-note">
+
+                                            <strong>Lý do:</strong>
+                                            @item.rejection_reason
+
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="status status-other">
+                                        @item.status
+                                    </span>
+                                }
+
+                            </td>
+
+
+                            <!-- THAO TÁC -->
+
+                            <td>
+
+                                <!-- XEM -->
+
+                                <a href="@Url.Action(
+                                    "Details",
+                                    "Events",
+                                    new
+                                    {
+                                        area = "Admin",
+                                        id = item.id
+                                    })"
+                                   class="btn btn-sm btn-outline-primary action-btn">
+
+                                    <i class="fa fa-eye"></i>
+                                    Xem
+
+                                </a>
+
+
+                                @if (item.status == "pending")
+                                {
+                                    <!-- DUYỆT -->
+
+                                    using (Html.BeginForm(
+                                        "Approve",
+                                        "Events",
+                                        new
+                                        {
+                                            area = "Admin",
+                                            id = item.id
+                                        },
+                                        FormMethod.Post,
+                                        new
+                                        {
+                                            style = "display:inline;"
+                                        }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-success action-btn mt-1"
+                                                onclick="return confirm('Bạn có chắc muốn phê duyệt sự kiện này?');">
+
+                                            <i class="fa fa-check"></i>
+                                            Duyệt
+
+                                        </button>
+                                    }
+
+
+                                    <!-- TỪ CHỐI -->
+
+                                    using (Html.BeginForm(
+                                        "Reject",
+                                        "Events",
+                                        new
+                                        {
+                                            area = "Admin",
+                                            id = item.id
+                                        },
+                                        FormMethod.Post,
+                                        new
+                                        {
+                                            @class = "reject-form"
+                                        }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="text"
+                                               name="rejection_reason"
+                                               class="form-control form-control-sm"
+                                               placeholder="Lý do từ chối..."
+                                               maxlength="500"
+                                               required />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-danger action-btn mt-1">
+
+                                            <i class="fa fa-times"></i>
+                                            Từ chối
+
+                                        </button>
+                                    }
+                                }
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+    }
+
+</div>
+
+
+<style>
+
+    /* ==========================================
+       PAGE HEADER
+    =========================================== */
+
+    .page-header {
+        margin-bottom: 25px;
+    }
+
+        .page-header h2 {
+            color: #005baa;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+            .page-header h2 i {
+                margin-right: 7px;
+            }
+
+        .page-header p {
+            color: #6c757d;
+            margin: 0;
+        }
+
+
+    /* ==========================================
+       FILTER
+    =========================================== */
+
+    .event-filter {
+        background: #f8fafc;
+        border: 1px solid #e5e9ed;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+        .event-filter label {
+            color: #123456;
+            font-weight: 600;
+        }
+
+    .filter-button {
+        display: flex;
+        align-items: end;
+        gap: 5px;
+    }
+
+
+    /* ==========================================
+       TABLE
+    =========================================== */
+
+    .admin-events-table {
+        background: #ffffff;
+        margin-bottom: 0;
+    }
+
+        .admin-events-table thead {
+            background: #005baa;
+            color: #ffffff;
+        }
+
+        .admin-events-table th {
+            padding: 12px;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .admin-events-table td {
+            padding: 12px;
+            vertical-align: middle;
+        }
+
+        .admin-events-table tbody tr:hover {
+            background: #f8fbfe;
+        }
+
+
+    /* ==========================================
+       EVENT
+    =========================================== */
+
+    .event-title {
+        color: #123456;
+        line-height: 1.4;
+    }
+
+    .event-location {
+        color: #6c757d;
+        font-size: 13px;
+        margin-top: 6px;
+    }
+
+        .event-location i {
+            color: #005baa;
+            margin-right: 4px;
+        }
+
+
+    /* ==========================================
+       STATUS
+    =========================================== */
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 9px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .status-pending {
+        background: #fff4d6;
+        color: #9a6700;
+    }
+
+    .status-approved {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+
+    .status-rejected {
+        background: #f8d7da;
+        color: #842029;
+    }
+
+    .status-other {
+        background: #e9ecef;
+        color: #495057;
+    }
+
+
+    /* ==========================================
+       REJECTION REASON
+    =========================================== */
+
+    .rejection-note {
+        margin-top: 8px;
+        padding: 7px;
+        background: #fff5f5;
+        border-radius: 5px;
+        color: #842029;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+
+    /* ==========================================
+       ACTION
+    =========================================== */
+
+    .action-btn {
+        white-space: nowrap;
+    }
+
+    .reject-form {
+        margin-top: 5px;
+    }
+
+
+    /* ==========================================
+       EMPTY
+    =========================================== */
+
+    .empty-box {
+        text-align: center;
+        background: #f8fafc;
+        border: 1px solid #e5e9ed;
+        border-radius: 10px;
+        padding: 55px 20px;
+    }
+
+        .empty-box i {
+            font-size: 50px;
+            color: #bdc5cc;
+            margin-bottom: 15px;
+        }
+
+        .empty-box h5 {
+            font-weight: 700;
+            color: #123456;
+        }
+
+        .empty-box p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+
+    /* ==========================================
+       MOBILE
+    =========================================== */
+
+    @@media (max-width: 768px) {
+
+        .admin-events-table {
+            min-width: 1200px;
+        }
+
+        .filter-button {
+            align-items: center;
+        }
+    }
+</style>

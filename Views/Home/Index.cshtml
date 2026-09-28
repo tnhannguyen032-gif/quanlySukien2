@@ -1,0 +1,553 @@
+﻿@{
+    ViewBag.Title = "Trang chủ";
+}
+
+<main>
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="home-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-text">
+
+                <div class="hero-badge">
+                    <i class="fa fa-university"></i>
+                    Đại học Thủ Dầu Một
+                </div>
+
+                <h1>
+                    Quản lý & Đăng ký
+                    <span>Sự kiện sinh viên</span>
+                </h1>
+
+                <p>
+                    Khám phá các hoạt động học tập, hướng nghiệp,
+                    hỗ trợ người học và hoạt động phong trào dành cho sinh viên.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="@Url.Action("Index", "Events")"
+                       class="btn btn-primary btn-lg mr-2">
+                        <i class="fa fa-calendar"></i>
+                        Xem sự kiện
+                    </a>
+
+                    @if (Session["UserId"] != null &&
+                        Session["Role"] != null &&
+                        Session["Role"].ToString() == "student")
+                    {
+                        <a href="@Url.Action("MyEvents", "Registrations")"
+                           class="btn btn-outline-primary btn-lg">
+                            <i class="fa fa-list"></i>
+                            Sự kiện của tôi
+                        </a>
+                    }
+                    else if (Session["UserId"] == null)
+                    {
+                        <a href="@Url.Action("Login", "Account")"
+                           class="btn btn-outline-primary btn-lg">
+                            <i class="fa fa-sign-in"></i>
+                            Đăng nhập
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="hero-icon">
+
+                <div class="hero-circle">
+                    <i class="fa fa-calendar-check-o"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CHỨC NĂNG
+    ========================== -->
+
+    <section class="home-section">
+
+        <div class="text-center mb-5">
+
+            <h2 class="section-title">
+                Hệ thống hỗ trợ bạn
+            </h2>
+
+            <p class="section-description">
+                Quản lý và theo dõi quá trình tham gia sự kiện một cách thuận tiện.
+            </p>
+
+        </div>
+
+
+        <div class="row">
+
+            <!-- ĐĂNG KÝ -->
+
+            <div class="col-md-4 mb-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="fa fa-calendar-plus-o"></i>
+                    </div>
+
+                    <h4>
+                        Đăng ký sự kiện
+                    </h4>
+
+                    <p>
+                        Tìm kiếm và đăng ký các sự kiện phù hợp
+                        với nhu cầu học tập và hoạt động sinh viên.
+                    </p>
+
+                    <a href="@Url.Action("Index", "Events")">
+                        Xem sự kiện →
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- THEO DÕI -->
+
+            <div class="col-md-4 mb-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="fa fa-tasks"></i>
+                    </div>
+
+                    <h4>
+                        Theo dõi đăng ký
+                    </h4>
+
+                    <p>
+                        Theo dõi trạng thái đăng ký,
+                        điểm danh và các sự kiện bạn đã tham gia.
+                    </p>
+
+                    @if (Session["UserId"] != null &&
+                        Session["Role"] != null &&
+                        Session["Role"].ToString() == "student")
+                    {
+                        <a href="@Url.Action("MyEvents", "Registrations")">
+                            Xem sự kiện của tôi →
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account")">
+                            Đăng nhập để sử dụng →
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- THÔNG BÁO -->
+
+            <div class="col-md-4 mb-4">
+
+                <div class="feature-card">
+
+                    <div class="feature-icon">
+                        <i class="fa fa-bell"></i>
+                    </div>
+
+                    <h4>
+                        Nhận thông báo
+                    </h4>
+
+                    <p>
+                        Nhận thông báo về kết quả đăng ký,
+                        phê duyệt và các hoạt động liên quan.
+                    </p>
+
+                    @if (Session["UserId"] != null &&
+                        Session["Role"] != null &&
+                        Session["Role"].ToString() == "student")
+                    {
+                        <a href="@Url.Action("Index", "Notifications")">
+                            Xem thông báo →
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account")">
+                            Đăng nhập để xem →
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         QUY TRÌNH
+    ========================== -->
+
+    <section class="process-section">
+
+        <div class="text-center mb-5">
+
+            <h2 class="section-title">
+                Tham gia sự kiện thật đơn giản
+            </h2>
+
+            <p class="section-description">
+                Chỉ với vài bước để tham gia một sự kiện.
+            </p>
+
+        </div>
+
+
+        <div class="row text-center">
+
+            <div class="col-md-3 mb-4">
+
+                <div class="process-item">
+
+                    <div class="process-number">
+                        1
+                    </div>
+
+                    <h5>
+                        Tìm sự kiện
+                    </h5>
+
+                    <p>
+                        Khám phá các sự kiện đang được tổ chức.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-4">
+
+                <div class="process-item">
+
+                    <div class="process-number">
+                        2
+                    </div>
+
+                    <h5>
+                        Đăng ký
+                    </h5>
+
+                    <p>
+                        Gửi yêu cầu tham gia sự kiện.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-4">
+
+                <div class="process-item">
+
+                    <div class="process-number">
+                        3
+                    </div>
+
+                    <h5>
+                        Tham gia
+                    </h5>
+
+                    <p>
+                        Theo dõi phê duyệt và điểm danh.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="col-md-3 mb-4">
+
+                <div class="process-item">
+
+                    <div class="process-number">
+                        4
+                    </div>
+
+                    <h5>
+                        Đánh giá
+                    </h5>
+
+                    <p>
+                        Chia sẻ cảm nhận sau sự kiện.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         CTA
+    ========================== -->
+
+    <section class="home-cta">
+
+        <div class="text-center">
+
+            <h2>
+                Sẵn sàng tham gia sự kiện?
+            </h2>
+
+            <p>
+                Khám phá những hoạt động mới nhất dành cho sinh viên.
+            </p>
+
+            <a href="@Url.Action("Index", "Events")"
+               class="btn btn-light btn-lg">
+                <i class="fa fa-calendar"></i>
+                Khám phá sự kiện
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+     CSS TRANG CHỦ
+========================== -->
+
+<style>
+
+    .home-hero {
+        background: linear-gradient(135deg, #f4f9fd, #e8f2fb);
+        border-radius: 16px;
+        margin-bottom: 60px;
+        overflow: hidden;
+    }
+
+    .hero-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 70px 70px;
+        min-height: 420px;
+    }
+
+    .hero-text {
+        max-width: 700px;
+    }
+
+    .hero-badge {
+        display: inline-block;
+        background: #ffffff;
+        color: #005baa;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .hero-text h1 {
+        font-size: 46px;
+        line-height: 1.2;
+        font-weight: 800;
+        color: #123456;
+        margin-bottom: 20px;
+    }
+
+        .hero-text h1 span {
+            display: block;
+            color: #005baa;
+        }
+
+    .hero-text p {
+        font-size: 18px;
+        line-height: 1.8;
+        color: #5c6b78;
+        margin-bottom: 30px;
+    }
+
+    .hero-circle {
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 35px rgba(0, 91, 170, 0.12);
+    }
+
+        .hero-circle i {
+            font-size: 90px;
+            color: #005baa;
+        }
+
+    .home-section {
+        padding: 20px 0 60px;
+    }
+
+    .section-title {
+        color: #123456;
+        font-weight: 700;
+        font-size: 32px;
+    }
+
+    .section-description {
+        color: #6c757d;
+        font-size: 16px;
+    }
+
+    .feature-card {
+        height: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e9ed;
+        border-radius: 12px;
+        padding: 30px;
+        transition: all 0.25s ease;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+    .feature-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background: #eaf4fc;
+        color: #005baa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
+
+    .feature-card h4 {
+        font-weight: 700;
+        color: #123456;
+        margin-bottom: 12px;
+    }
+
+    .feature-card p {
+        color: #6c757d;
+        line-height: 1.7;
+        min-height: 80px;
+    }
+
+    .feature-card a {
+        color: #005baa;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .process-section {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 60px 30px;
+        margin-bottom: 60px;
+    }
+
+    .process-number {
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        background: #005baa;
+        color: #ffffff;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .process-item h5 {
+        font-weight: 700;
+        color: #123456;
+    }
+
+    .process-item p {
+        color: #6c757d;
+        line-height: 1.6;
+    }
+
+    .home-cta {
+        background: #005baa;
+        border-radius: 16px;
+        padding: 55px 30px;
+        margin-bottom: 40px;
+        color: #ffffff;
+    }
+
+        .home-cta h2 {
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .home-cta p {
+            margin-bottom: 25px;
+            font-size: 17px;
+        }
+
+    @@media (max-width: 768px) {
+
+        .hero-content {
+            padding: 45px 25px;
+            text-align: center;
+        }
+
+        .hero-text h1 {
+            font-size: 34px;
+        }
+
+        .hero-text p {
+            font-size: 16px;
+        }
+
+        .hero-icon {
+            display: none;
+        }
+
+        .hero-buttons .btn {
+            margin-bottom: 10px;
+        }
+
+        .feature-card {
+            padding: 25px;
+        }
+    }
+</style>

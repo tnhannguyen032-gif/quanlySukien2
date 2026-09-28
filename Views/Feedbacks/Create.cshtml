@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Đánh giá sự kiện";
+
+    int eventId = ViewBag.EventId;
+    string eventTitle = ViewBag.EventTitle;
+}
+
+<div class="container" style="max-width: 800px; margin: 40px auto;">
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+            <h2 style="color:#005BAA; font-weight:700;">
+                Đánh giá sự kiện
+            </h2>
+
+            <p class="text-muted mb-4">
+                Vui lòng chia sẻ cảm nhận của bạn về sự kiện.
+            </p>
+
+            <div class="alert alert-info">
+                <strong>Sự kiện:</strong> @eventTitle
+            </div>
+
+            @using (Html.BeginForm("Create", "Feedbacks", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="eventId" value="@eventId" />
+
+                <div class="form-group mb-4">
+                    <label class="font-weight-bold">
+                        Đánh giá
+                    </label>
+
+                    <select name="rating"
+                            class="form-control"
+                            style="max-width:200px;"
+                            required>
+                        <option value="">-- Chọn số sao --</option>
+                        <option value="5">★★★★★ - Rất tốt</option>
+                        <option value="4">★★★★☆ - Tốt</option>
+                        <option value="3">★★★☆☆ - Bình thường</option>
+                        <option value="2">★★☆☆☆ - Chưa tốt</option>
+                        <option value="1">★☆☆☆☆ - Rất chưa tốt</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label class="font-weight-bold">
+                        Nhận xét
+                    </label>
+
+                    <textarea name="comment"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Nhập nhận xét của bạn..."
+                              maxlength="1000"></textarea>
+                </div>
+
+                <div class="mt-4">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        <i class="fa fa-paper-plane"></i>
+                        Gửi đánh giá
+                    </button>
+
+                    <a href="@Url.Action("Details", "Events", new { id = eventId })"
+                       class="btn btn-secondary ml-2">
+                        Quay lại
+                    </a>
+
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

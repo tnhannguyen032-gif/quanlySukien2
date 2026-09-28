@@ -1,0 +1,91 @@
+﻿@model quanlySukien.Models.@event
+
+@{
+    ViewBag.Title = "Đăng ký tham gia";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h3 style="color:#005baa; font-weight:700;">
+                        Đăng ký tham gia sự kiện
+                    </h3>
+
+                    <hr />
+
+                    <h4>
+                        @Model.title
+                    </h4>
+
+                    <p>
+                        <strong>Địa điểm:</strong>
+                        @Model.location
+                    </p>
+
+                    <p>
+                        <strong>Thời gian:</strong>
+                        @Model.start_time.ToString("dd/MM/yyyy HH:mm")
+                    </p>
+
+                    @if (Model.registration_deadline.HasValue)
+                    {
+                        <p>
+                            <strong>Hạn đăng ký:</strong>
+                            @Model.registration_deadline.Value.ToString("dd/MM/yyyy HH:mm")
+                        </p>
+                    }
+
+                    <div class="alert alert-info mt-4">
+                        Sau khi đăng ký, yêu cầu của bạn sẽ ở trạng thái
+                        <strong>Chờ kiểm duyệt</strong>.
+                    </div>
+
+                    @using (Html.BeginForm(
+                        "Create",
+                        "Registrations",
+                        FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="eventId"
+                               value="@Model.id" />
+
+                        <div class="d-flex">
+
+                            <button type="submit"
+                                    class="btn btn-primary mr-2">
+                                Xác nhận đăng ký
+                            </button>
+
+                            @Html.ActionLink(
+                                "Quay lại",
+                                "Details",
+                                "Events",
+                                new { id = Model.id },
+                                new
+                                {
+                                    @class = "btn btn-outline-secondary"
+                                }
+                            )
+
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
